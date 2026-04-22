@@ -1,27 +1,26 @@
 using AcAgent.Infrastructure;
 using AcAgent.Models;
-using AcTools.Processes;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace AcAgent.Services;
 
 /// <summary>
-/// Orchestrates launching Assetto Corsa and monitors the game process.
+/// Orchestrates launching Assetto Corsa and monitoring the real game process.
 ///
 /// Flow:
-///   1. Caller calls <see cref="LaunchAsync"/>.
-///   2. We build <see cref="Game.StartProperties"/> via <see cref="AcToolsIntegration"/>.
-///   3. We start a <see cref="TrickyStarter"/> (the AcTools mechanism that
-///      temporarily replaces AssettoCorsa.exe so Steam is satisfied, then
-///      launches acs.exe directly).
-///   4. A linked CancellationToken monitors both the session timer and an early
-///      exit by the player (detected by polling the process handle).
-///   5. When the token fires (timer or manual exit) we call starter.CleanUp()
-///      which kills acs.exe if still running and restores AssettoCorsa.exe.
-///   6. We return the finished <see cref="Session"/> record.
+///   1. Writes race.ini + assists.ini via AcToolsIntegration.
+///   2. Starts AssettoCorsa.exe (Steam launcher stub — exits in ~5 s).
+///   3. Polls process list until acs.exe / acs_x86.exe appears (the real game).
+///   4. Waits for acs.exe to exit OR for the session timer / external cancel.
+///   5. If the timer fires first, acs.exe is killed and the session record returned.
 /// </summary>
 public sealed class GameLauncherService
 {
+    // Real game process names to look for after the launcher stub exits
+    private static readonly string[] AcsProcessNames = new[] { "acs", "acs_x86" };
+
+
     private readonly AcToolsIntegration _acTools;
     private readonly SessionManager _sessionManager;
     private readonly ILogger<GameLauncherService> _logger;
@@ -37,110 +36,171 @@ public sealed class GameLauncherService
     }
 
     /// <summary>
-    /// Launches Assetto Corsa for the specified configuration and blocks until
-    /// the session ends (timer expiry or player exit), then returns the completed
-    /// <see cref="Session"/> record.
+    /// Writes the race config, launches the game and blocks until the session
+    /// ends (timer expiry or player exit), then returns the completed Session.
     /// </summary>
-    public async Task<Session> LaunchAsync(GameConfig config, CancellationToken externalCancellation = default)
+    public async Task<Session> LaunchAsync(
+        GameConfig config,
+        CancellationToken externalCancellation = default)
     {
         _logger.LogInformation(
-            "[Launch] Starting session — car={Car}, track={Track}, mode={Mode}, limit={Min}min",
+            "[Launch] Starting — car={Car} track={Track} mode={Mode} limit={Min}min",
             config.CarId, config.TrackId, config.Mode, config.DurationMinutes);
 
-        // ── Build AcTools objects ────────────────────────────────────────────
-        var startProps = _acTools.BuildStartProperties(config);
-        var starter = _acTools.CreateStarter();
+        // ── 1. Write race.ini + assists.ini ───────────────────────────────────
+        _acTools.WriteRaceConfig(config);
 
-        // ── Create the session record ────────────────────────────────────────
+        // ── 2. Session record ─────────────────────────────────────────────────
         var session = _sessionManager.BeginSession(config);
+        session.StartTimeUtc = DateTime.UtcNow;
 
-        // ── Set up dual-source cancellation ─────────────────────────────────
-        //   Source A: timer  (config.DurationMinutes)
-        //   Source B: external caller  (e.g. Ctrl+C)
+        // ── 3. Timer + cancel ─────────────────────────────────────────────────
         using var timerCts = new CancellationTokenSource(
             TimeSpan.FromMinutes(config.DurationMinutes));
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             timerCts.Token, externalCancellation);
+        var ct = linked.Token;
 
-        var combinedToken = linked.Token;
+        // ── 4. Start AssettoCorsa.exe (launcher stub) ─────────────────────────
+        var exePath = _acTools.GetAcExePath();
+        _logger.LogInformation("[Launch] Starting launcher: {Exe}", exePath);
 
+        Process.Start(new ProcessStartInfo(exePath)
+        {
+            UseShellExecute = true,
+            WorkingDirectory = Path.GetDirectoryName(exePath)!,
+        });
+
+        // Give the launcher a moment to spawn acs.exe
+        await Task.Delay(3000, ct).ConfigureAwait(false);
+
+        // ── 5. Poll for the real game process (acs.exe / acs_x86.exe) ─────────
+        _logger.LogInformation("[Launch] Polling for acs.exe…");
+        Process? gameProc = null;
+
+        var deadline = DateTime.UtcNow.AddSeconds(60);
+        while (DateTime.UtcNow < deadline && !ct.IsCancellationRequested)
+        {
+            gameProc = FindAcsProcess();
+            if (gameProc != null)
+            {
+                _logger.LogInformation("[Launch] Found '{Name}' PID={Pid}",
+                    gameProc.ProcessName, gameProc.Id);
+                break;
+            }
+            await Task.Delay(500, ct).ConfigureAwait(false);
+        }
+
+        if (gameProc == null)
+        {
+            _logger.LogWarning("[Launch] acs.exe not found within 60 s — ending session.");
+            session = _sessionManager.EndSession(session);
+            return session;
+        }
+
+        // ── 6. Wait for acs.exe to exit or timer ──────────────────────────────
         try
         {
-            // ── Launch via AcTools async pipeline ────────────────────────────
-            // Game.StartAsync:
-            //   1. Writes race.ini / assists.ini
-            //   2. Starts the TrickyStarter launcher stub
-            //   3. Waits for acs.exe to appear in the process list
-            //   4. Awaits game exit (or cancellation)
-            //   5. On finish: restores AssettoCorsa.exe, reads race_out.json
-            var progressReport = new Progress<Game.ProgressState>(state =>
-                _logger.LogDebug("[AcTools] Game state → {State}", state));
+            await gameProc.WaitForExitAsync(ct);
 
-            _logger.LogInformation("[Launch] Handing off to AcTools Game.StartAsync…");
-
-            var gameTask = Game.StartAsync(starter, startProps, progressReport, combinedToken);
-
-            // Concurrently poll whether the game exited on its own BEFORE the timer fires.
-            // Game.StartAsync will also detect this (via WaitGameAsync) but we want to
-            // set PlayerExitedEarly correctly.
-            session.StartTimeUtc = DateTime.UtcNow;
-
-            await gameTask;
-
-            // If we reach here without cancellation the game exited cleanly
+            // If we get here without cancellation → player closed the game early
             if (!timerCts.IsCancellationRequested)
             {
                 session.PlayerExitedEarly = true;
-                _logger.LogInformation("[Launch] Player exited the game before the timer ended.");
+                _logger.LogInformation("[Launch] Player closed the game before timer.");
             }
             else
             {
                 session.TimerEnded = true;
-                _logger.LogInformation("[Launch] Session timer expired. Game closed by agent.");
+                _logger.LogInformation("[Launch] Timer expired.");
             }
         }
         catch (OperationCanceledException) when (timerCts.IsCancellationRequested)
         {
-            // Timer fired — session ended by agent
             session.TimerEnded = true;
-            _logger.LogInformation("[Launch] Timer cancellation received — game was closed by agent.");
+            _logger.LogInformation("[Launch] Timer fired — killing acs.exe.");
+            KillGame(gameProc);
         }
         catch (OperationCanceledException)
         {
-            // External cancellation (Ctrl+C etc.)
-            _logger.LogWarning("[Launch] External cancellation — shutting down game.");
+            _logger.LogWarning("[Launch] External cancel — killing acs.exe.");
+            KillGame(gameProc);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "[Launch] Unexpected error during game session.");
+            _logger.LogError(ex, "[Launch] Unexpected error.");
+            KillGame(gameProc);
             throw;
         }
         finally
         {
-            // Ensure acs.exe is not left orphaned under any code path
-            try { starter.CleanUp(); }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "[Launch] CleanUp threw (AssettoCorsa.exe restore may have failed).");
-            }
-
-            session = _sessionManager.EndSession(session);
-            _logger.LogInformation(
-                "[Launch] Session ended. Duration={Duration:F1} min, TimerEnded={TimerEnded}, EarlyExit={EarlyExit}",
-                session.DurationMinutes, session.TimerEnded, session.PlayerExitedEarly);
+            gameProc.Dispose();
         }
+
+        session = _sessionManager.EndSession(session);
+        _logger.LogInformation(
+            "[Launch] Done. Duration={D:F1}min TimerEnded={T} EarlyExit={E}",
+            session.DurationMinutes, session.TimerEnded, session.PlayerExitedEarly);
 
         return session;
     }
 
-    // ── Content helpers (pass-through to AcToolsIntegration) ─────────────────
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
-    /// <summary>Lists all car IDs installed in the AC content folder.</summary>
-    public IReadOnlyList<string> ListCars() => _acTools.GetAvailableCars();
+    /// <summary>
+    /// Looks for acs.exe or acs_x86.exe in the current process list.
+    /// Returns the first match, or null if not running yet.
+    /// </summary>
+    private static Process? FindAcsProcess()
+    {
+        foreach (var name in AcsProcessNames)
+        {
+            var procs = Process.GetProcessesByName(name);
+            if (procs.Length > 0) return procs[0];
+        }
+        return null;
+    }
 
-    /// <summary>Lists all track IDs installed in the AC content folder.</summary>
+    private void KillGame(Process? trackedProc)
+    {
+        // Kill by tracked handle first
+        if (trackedProc != null && !trackedProc.HasExited)
+        {
+            try
+            {
+                trackedProc.Kill(entireProcessTree: true);
+                _logger.LogInformation("[Launch] Killed tracked game process PID={Pid}.", trackedProc.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "[Launch] Could not kill tracked process.");
+            }
+        }
+
+        // Belt-and-braces: also sweep for any remaining acs.exe / acs_x86.exe
+        foreach (var name in AcsProcessNames)
+        {
+            foreach (var p in Process.GetProcessesByName(name))
+            {
+                try
+                {
+                    if (!p.HasExited)
+                    {
+                        p.Kill(entireProcessTree: true);
+                        _logger.LogInformation("[Launch] Force-killed residual '{Name}' PID={Pid}.", name, p.Id);
+                    }
+                }
+                catch { /* best-effort */ }
+                finally { p.Dispose(); }
+            }
+        }
+    }
+
+
+    // ── Content helpers ───────────────────────────────────────────────────────
+
+    public IReadOnlyList<string> ListCars()   => _acTools.GetAvailableCars();
     public IReadOnlyList<string> ListTracks() => _acTools.GetAvailableTracks();
-
-    /// <summary>Lists layout variants for a given track (empty = single layout).</summary>
-    public IReadOnlyList<string> ListTrackLayouts(string trackId) => _acTools.GetTrackLayouts(trackId);
+    public IReadOnlyList<string> ListTrackLayouts(string trackId)
+        => _acTools.GetTrackLayouts(trackId);
 }

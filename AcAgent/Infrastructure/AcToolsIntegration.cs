@@ -152,8 +152,105 @@ public sealed class AcToolsIntegration
         return new TrickyStarter(_acRoot)
         {
             Use32BitVersion = use32Bit,
-            RunSteamIfNeeded = true   // try to start Steam automatically if not running
+            RunSteamIfNeeded = true
         };
+    }
+
+    /// <summary>Returns the full path to AssettoCorsa.exe.</summary>
+    public string GetAcExePath()
+    {
+        var exe = Path.Combine(_acRoot, "AssettoCorsa.exe");
+        if (!File.Exists(exe))
+            throw new FileNotFoundException(
+                $"AssettoCorsa.exe not found at '{exe}'. Check the AcRoot setting.", exe);
+        return exe;
+    }
+
+    /// <summary>
+    /// Writes race.ini and assists.ini into the AC cfg\ directory so the game
+    /// picks up the chosen car, track, mode and assists on next launch.
+    /// Uses AcTools' IniFile for safe, encoding-correct writes.
+    /// </summary>
+    public void WriteRaceConfig(GameConfig config)
+    {
+        ValidateConfig(config);
+
+        var cfgDir = Path.Combine(_acRoot, "cfg");
+        Directory.CreateDirectory(cfgDir);
+
+        // ── race.ini ─────────────────────────────────────────────────────────
+        var raceIniPath = Path.Combine(cfgDir, "race.ini");
+        var raceIni = new AcTools.DataFile.IniFile(raceIniPath);
+
+        // [RACE] section — core selection
+        raceIni["RACE"]["MODEL"]        = config.CarId;
+        raceIni["RACE"]["SKIN"]         = ResolveCarSkin(config) ?? "default";
+        raceIni["RACE"]["TRACK"]        = config.TrackId;
+        raceIni["RACE"]["CONFIG_TRACK"] = config.TrackLayout ?? "";
+        raceIni["RACE"]["CARS"]         = "1";
+        raceIni["RACE"]["AI_LEVEL"]     = "95";
+
+        // Session type
+        int sessionType = config.Mode switch
+        {
+            DriveMode.Practice    => 1,
+            DriveMode.HotLap      => 1,
+            DriveMode.TimeAttack  => 1,
+            DriveMode.Drift       => 1,
+            DriveMode.QuickRace   => 3,
+            _                     => 1,
+        };
+
+        raceIni["SESSION_0"]["NAME"]             = config.Mode.ToString();
+        raceIni["SESSION_0"]["TYPE"]             = sessionType.ToString();
+        raceIni["SESSION_0"]["DURATION_MINUTES"] = config.DurationMinutes.ToString();
+        raceIni["SESSION_0"]["SPAWN_SET"]        = "HOTLAP_START";
+
+        // [CAR_0] — the player car
+        raceIni["CAR_0"]["MODEL"]       = config.CarId;
+        raceIni["CAR_0"]["SKIN"]        = ResolveCarSkin(config) ?? "default";
+        raceIni["CAR_0"]["DRIVER_NAME"] = config.DriverName ?? Environment.UserName;
+        raceIni["CAR_0"]["AI_LEVEL"]    = "0"; // 0 = human
+
+        // Weather / conditions
+        raceIni["WEATHER_0"]["GRAPHICS"]                  = config.WeatherName ?? "Clear";
+        raceIni["WEATHER_0"]["BASE_TEMPERATURE_AMBIENT"]  = config.AmbientTemperatureC.ToString();
+        raceIni["WEATHER_0"]["BASE_TEMPERATURE_ROAD"]     = config.RoadTemperatureC.ToString();
+        raceIni["WEATHER_0"]["VARIATION_AMBIENT"]         = "0";
+        raceIni["WEATHER_0"]["WIND_BASE_SPEED_MIN"]       = "0";
+        raceIni["WEATHER_0"]["WIND_BASE_SPEED_MAX"]       = "0";
+        raceIni["WEATHER_0"]["WIND_DIRECTION"]            = "0";
+        raceIni["WEATHER_0"]["WIND_DIRECTION_VARIATION"]  = "0";
+
+        // Dynamic track
+        raceIni["DYNAMIC_TRACK"]["SESSION_START"]   = "95";
+        raceIni["DYNAMIC_TRACK"]["RANDOMNESS"]      = "1";
+        raceIni["DYNAMIC_TRACK"]["LAP_GAIN"]        = "2";
+        raceIni["DYNAMIC_TRACK"]["SESSION_TRANSFER"] = "80";
+
+        raceIni.Save();
+        _logger.LogInformation("[Config] race.ini written to {Path}", raceIniPath);
+
+        // ── assists.ini ───────────────────────────────────────────────────────
+        var assistsIniPath = Path.Combine(cfgDir, "assists.ini");
+        var assistsIni = new AcTools.DataFile.IniFile(assistsIniPath);
+        var ea = config.EasyAssists;
+
+        assistsIni["ASSISTS"]["ABS"]            = ea ? "1" : "0";  // 0=Off,1=Factory,2=On
+        assistsIni["ASSISTS"]["TC"]             = ea ? "1" : "0";
+        assistsIni["ASSISTS"]["STABILITY"]      = ea ? "50" : "0";
+        assistsIni["ASSISTS"]["AUTOBLIP"]       = ea ? "1" : "0";
+        assistsIni["ASSISTS"]["IDEAL_LINE"]     = ea ? "1" : "0";
+        assistsIni["ASSISTS"]["AUTO_CLUTCH"]    = ea ? "1" : "0";
+        assistsIni["ASSISTS"]["AUTO_SHIFTER"]   = ea ? "1" : "0";
+        assistsIni["ASSISTS"]["VISUALDAMAGE"]   = "1";
+        assistsIni["ASSISTS"]["DAMAGE"]         = "100";
+        assistsIni["ASSISTS"]["FUEL"]           = "1";
+        assistsIni["ASSISTS"]["TYRE_WEAR"]      = "1";
+        assistsIni["ASSISTS"]["TYRE_BLANKETS"]  = ea ? "1" : "0";
+
+        assistsIni.Save();
+        _logger.LogInformation("[Config] assists.ini written to {Path}", assistsIniPath);
     }
 
     // ── StartProperties builder ──────────────────────────────────────────────
