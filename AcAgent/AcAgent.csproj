@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>AcAgent</AssemblyName>
+    <RootNamespace>AcAgent</RootNamespace>
+    <PlatformTarget>x86</PlatformTarget>
+    <!-- 'preview' enables C# 11 raw string literals on .NET 6 SDK -->
+    <LangVersion>preview</LangVersion>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Newtonsoft.Json is used for session log serialisation -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- Microsoft.Data.Sqlite is used for the optional SQLite report store -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.0" />
+    <!-- Microsoft.Extensions.DependencyInjection for the DI container -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <!-- Microsoft.Extensions.Logging for structured console logging -->
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <!-- Configuration: read AC root from appsettings.json -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
+  </ItemGroup>
+
+  <!-- Copy appsettings.json to output so it sits beside the exe -->
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- AcTools source reference: build AcTools/AcTools.csproj first (MSBuild x86 Debug),
+       then the DLL will appear at ..\Output\x86\Debug\AcTools.dll -->
+
+  <ItemGroup>
+    <!--
+      After building AcTools in Debug|x86 the output lands in:
+        ..\Output\x86\Debug\AcTools.dll
+      Adjust the HintPath if you build in Release or x64.
+    -->
+    <Reference Include="AcTools">
+      <HintPath>..\Output\x86\Debug\AcTools.dll</HintPath>
+    </Reference>
+    <!-- AcTools depends on Newtonsoft.Json; the DLL ships alongside it -->
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Libraries\Newtonsoft.Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

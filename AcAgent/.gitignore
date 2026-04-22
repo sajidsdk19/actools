@@ -1,0 +1,28 @@
+# AcAgent – .gitignore
+# (placed inside AcAgent/ so it covers only this project)
+
+## Build artefacts
+bin/
+obj/
+publish/
+
+## Session data produced at runtime – do NOT commit
+data/
+*.db
+*.db-shm
+*.db-wal
+*.jsonl
+
+## IDE / OS
+.vs/
+.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+## .NET publish
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json
