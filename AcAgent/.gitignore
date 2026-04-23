@@ -5,6 +5,7 @@
 bin/
 obj/
 publish/
+dist/
 
 ## Session data produced at runtime – do NOT commit
 data/

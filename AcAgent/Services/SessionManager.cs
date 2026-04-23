@@ -54,18 +54,20 @@ public sealed class SessionManager
     /// </summary>
     public Session EndSession(Session session)
     {
-        session.EndTimeUtc = DateTime.UtcNow;
+        session.EndTimeUtc      = DateTime.UtcNow;
+        session.DurationMinutes = (session.EndTimeUtc.Value - session.StartTimeUtc).TotalMinutes;
         _activeSession = null;
+
 
         _logger.LogInformation(
             "[Session] Ended session {Id} — actual duration {Min:F1} min",
             session.Id, session.DurationMinutes);
 
-        // Fire-and-forget persistence (errors are logged inside ReportingService)
         _ = _reporting.SaveSessionAsync(session);
 
         return session;
     }
+
 
     /// <summary>Returns the currently active session, or null if none is running.</summary>
     public Session? GetActiveSession() => _activeSession;

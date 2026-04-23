@@ -41,6 +41,13 @@ public partial class MainWindow : Window
         _launcher  = App.Services.GetRequiredService<GameLauncherService>();
         _reporting = App.Services.GetRequiredService<ReportingService>();
 
+        // Reset countdown clock the moment acs.exe is confirmed running
+        _launcher.OnGameStarted = () =>
+            Dispatcher.Invoke(() =>
+            {
+                _sessionStartTime = DateTime.UtcNow;
+            });
+
         PcLabel.Text     = $"PC: {Environment.MachineName}";
         DriverNameBox.Text = Environment.UserName;
 

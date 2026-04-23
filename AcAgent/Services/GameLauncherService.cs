@@ -17,8 +17,16 @@ namespace AcAgent.Services;
 /// </summary>
 public sealed class GameLauncherService
 {
-    // Real game process names to look for after the launcher stub exits
-    private static readonly string[] AcsProcessNames = new[] { "acs", "acs_x86" };
+    // Names used when POLLING for the real game engine (NOT the launcher stub).
+    // AssettoCorsa.exe is intentionally excluded here — it exits in ~5 s after
+    // handing off to acs.exe, so tracking it as the game process would cause
+    // a false "Player Exited Early" almost immediately.
+    private static readonly string[] AcsFindNames = new[] { "acs", "acs_x86" };
+
+    // Names used when KILLING at the end of a session.
+    // AssettoCorsa IS included here so the kill sweep closes it too if it is
+    // still alive (some non-Steam / modded installs keep it running).
+    private static readonly string[] AcsKillNames = new[] { "acs", "acs_x86", "AssettoCorsa" };
 
 
     private readonly AcToolsIntegration _acTools;
@@ -39,6 +47,10 @@ public sealed class GameLauncherService
     /// Writes the race config, launches the game and blocks until the session
     /// ends (timer expiry or player exit), then returns the completed Session.
     /// </summary>
+    /// <summary>Optional callback invoked (on a background thread) once acs.exe
+    /// is confirmed running. The UI can use this to reset its clock.</summary>
+    public Action? OnGameStarted { get; set; }
+
     public async Task<Session> LaunchAsync(
         GameConfig config,
         CancellationToken externalCancellation = default)
@@ -52,35 +64,41 @@ public sealed class GameLauncherService
 
         // ── 2. Session record ─────────────────────────────────────────────────
         var session = _sessionManager.BeginSession(config);
-        session.StartTimeUtc = DateTime.UtcNow;
+        // StartTimeUtc will be set once acs.exe is confirmed running
 
-        // ── 3. Timer + cancel ─────────────────────────────────────────────────
-        using var timerCts = new CancellationTokenSource(
-            TimeSpan.FromMinutes(config.DurationMinutes));
-        using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            timerCts.Token, externalCancellation);
-        var ct = linked.Token;
+        // ── 3. (Timer is armed AFTER the game process is confirmed — see below) ──
 
-        // ── 4. Start AssettoCorsa.exe (launcher stub) ─────────────────────────
+        // ── 4. Start AssettoCorsa.exe and track its PID ───────────────────────
         var exePath = _acTools.GetAcExePath();
-        _logger.LogInformation("[Launch] Starting launcher: {Exe}", exePath);
+        _logger.LogInformation("[Launch] Starting: {Exe}", exePath);
 
-        Process.Start(new ProcessStartInfo(exePath)
+        var launcherInfo = new ProcessStartInfo(exePath)
         {
             UseShellExecute = true,
             WorkingDirectory = Path.GetDirectoryName(exePath)!,
-        });
+        };
 
-        // Give the launcher a moment to spawn acs.exe
-        await Task.Delay(3000, ct).ConfigureAwait(false);
+        using var launcherProc = Process.Start(launcherInfo)
+            ?? throw new InvalidOperationException("Failed to start AssettoCorsa.exe.");
 
-        // ── 5. Poll for the real game process (acs.exe / acs_x86.exe) ─────────
-        _logger.LogInformation("[Launch] Polling for acs.exe…");
+        int launcherPid = launcherProc.Id;
+        _logger.LogInformation("[Launch] Launcher PID={Pid}", launcherPid);
+
+        // ── 5. Find the real game process ────────────────────────────────────
+        // Strategy:
+        //   a) Poll for acs.exe / acs_x86.exe (the dedicated game process).
+        //   b) If not found after 30 s, fall back to AssettoCorsa.exe itself
+        //      (on some installs it IS the long-running game process).
+        //   c) Timeout = 120 s total.
+        _logger.LogInformation("[Launch] Polling for game process…");
         Process? gameProc = null;
 
-        var deadline = DateTime.UtcNow.AddSeconds(60);
-        while (DateTime.UtcNow < deadline && !ct.IsCancellationRequested)
+        // Poll using only externalCancellation — the session timer hasn't
+        // started yet (we arm it after the game is confirmed running).
+        var deadline = DateTime.UtcNow.AddSeconds(120);
+        while (DateTime.UtcNow < deadline && !externalCancellation.IsCancellationRequested)
         {
+            // Try acs.exe / acs_x86.exe first
             gameProc = FindAcsProcess();
             if (gameProc != null)
             {
@@ -88,22 +106,53 @@ public sealed class GameLauncherService
                     gameProc.ProcessName, gameProc.Id);
                 break;
             }
-            await Task.Delay(500, ct).ConfigureAwait(false);
+
+            // After 30 s fall back to AssettoCorsa.exe if it is still alive
+            // (some installs never spawn a separate acs.exe).
+            if ((deadline - DateTime.UtcNow).TotalSeconds < 90)
+            {
+                try
+                {
+                    var ac = Process.GetProcessById(launcherPid);
+                    if (!ac.HasExited)
+                    {
+                        gameProc = ac;
+                        _logger.LogInformation(
+                            "[Launch] Falling back to AssettoCorsa.exe PID={Pid}", launcherPid);
+                        break;
+                    }
+                }
+                catch { /* process already gone */ }
+            }
+
+            await Task.Delay(1000, externalCancellation).ConfigureAwait(false);
         }
 
         if (gameProc == null)
         {
-            _logger.LogWarning("[Launch] acs.exe not found within 60 s — ending session.");
+            _logger.LogWarning("[Launch] Game process not found within 120 s — killing any stragglers and ending session.");
+            KillGame(null);   // sweep acs.exe / AssettoCorsa.exe just in case
+            session.StartTimeUtc = DateTime.UtcNow;
             session = _sessionManager.EndSession(session);
             return session;
         }
 
-        // ── 6. Wait for acs.exe to exit or timer ──────────────────────────────
+        // ── Arm the session timer NOW — game is confirmed running ─────────────
+        session.StartTimeUtc = DateTime.UtcNow;
+        _logger.LogInformation("[Launch] Game clock started at {T}", session.StartTimeUtc);
+        OnGameStarted?.Invoke();
+
+        using var timerCts = new CancellationTokenSource(
+            TimeSpan.FromMinutes(config.DurationMinutes));
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(
+            timerCts.Token, externalCancellation);
+        var ct = linked.Token;
+
         try
         {
             await gameProc.WaitForExitAsync(ct);
 
-            // If we get here without cancellation → player closed the game early
+            // Reached here without cancellation → player closed the game early
             if (!timerCts.IsCancellationRequested)
             {
                 session.PlayerExitedEarly = true;
@@ -111,19 +160,21 @@ public sealed class GameLauncherService
             }
             else
             {
+                // Timer fired but the process happened to exit simultaneously
                 session.TimerEnded = true;
-                _logger.LogInformation("[Launch] Timer expired.");
+                _logger.LogInformation("[Launch] Timer expired (process already gone).");
             }
         }
         catch (OperationCanceledException) when (timerCts.IsCancellationRequested)
         {
+            // ── TIMER EXPIRED — force-close AssettoCorsa / acs.exe ───────────
             session.TimerEnded = true;
-            _logger.LogInformation("[Launch] Timer fired — killing acs.exe.");
+            _logger.LogInformation("[Launch] Timer fired — force-killing game.");
             KillGame(gameProc);
         }
         catch (OperationCanceledException)
         {
-            _logger.LogWarning("[Launch] External cancel — killing acs.exe.");
+            _logger.LogWarning("[Launch] External cancel — killing game.");
             KillGame(gameProc);
         }
         catch (Exception ex)
@@ -153,7 +204,9 @@ public sealed class GameLauncherService
     /// </summary>
     private static Process? FindAcsProcess()
     {
-        foreach (var name in AcsProcessNames)
+        // Only look for the actual engine executables — NOT AssettoCorsa.exe,
+        // which is the Steam launcher stub that exits in ~5 s.
+        foreach (var name in AcsFindNames)
         {
             var procs = Process.GetProcessesByName(name);
             if (procs.Length > 0) return procs[0];
@@ -177,8 +230,8 @@ public sealed class GameLauncherService
             }
         }
 
-        // Belt-and-braces: also sweep for any remaining acs.exe / acs_x86.exe
-        foreach (var name in AcsProcessNames)
+        // Belt-and-braces sweep: kill acs.exe, acs_x86.exe, AND AssettoCorsa.exe
+        foreach (var name in AcsKillNames)
         {
             foreach (var p in Process.GetProcessesByName(name))
             {

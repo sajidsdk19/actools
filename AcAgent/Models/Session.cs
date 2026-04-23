@@ -36,12 +36,10 @@ public sealed class Session
     [JsonProperty("endTime")]
     public DateTime? EndTimeUtc { get; set; }
 
-    /// <summary>Actual playtime in whole minutes.</summary>
+    /// <summary>Actual playtime in minutes (set by SessionManager.EndSession).</summary>
     [JsonProperty("durationMinutes")]
-    public double DurationMinutes =>
-        EndTimeUtc.HasValue
-            ? (EndTimeUtc.Value - StartTimeUtc).TotalMinutes
-            : 0;
+    public double DurationMinutes { get; set; }
+
 
     /// <summary>True when the session was ended by the timer (not the player).</summary>
     [JsonProperty("timerEnded")]
