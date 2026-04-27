@@ -14,6 +14,7 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
+
 # Windows shortcuts
 *.lnk
 
@@ -52,6 +53,8 @@ TestResults/*
 # Result files
 */bin
 */Publish
+/remote-manager/client-agent/node_modules
+/remote-manager/server/node_modules
 
 # For debugging, VS builds faster in just one output folder
 Output/*

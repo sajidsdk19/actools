@@ -1,0 +1,96 @@
+[2026-04-27T22:16:18.021Z] INFO: [Agent] Registering as "TEST-PC-1"…
+[2026-04-27T22:16:18.087Z] INFO: [Agent] Registered — device ID: 5d4d90e9d0316c44580277f42dbe6436
+[2026-04-27T22:16:18.122Z] INFO: [Agent] Connected to server — socket qdT7N38QbBlAXmJnAAAB
+[2026-04-27T22:18:40.877Z] WARN: [Agent] Disconnected: transport close
+[2026-04-27T22:18:43.252Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:18:46.843Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:18:51.876Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:18:56.923Z] INFO: [Agent] Connected to server — socket H0TUTs0gyVXQOs6xAAAB
+[2026-04-27T22:19:26.796Z] INFO: [Agent] START_SESSION received
+[2026-04-27T22:20:37.879Z] INFO: [Agent] Using stored device token
+[2026-04-27T22:20:37.929Z] INFO: [Agent] Connected to server — socket ymfFSURj4Pch9KdoAAAD
+[2026-04-27T22:20:59.855Z] INFO: [Agent] START_SESSION received
+[2026-04-27T22:20:59.855Z] INFO: [GameProcess] Launching: C:\Users\sajid\Desktop\Freelacing\actools\AcAgent\bin\Debug\AcAgent.exe --car lotus_elise_sc --track magione --mode Practice --duration 1 --ac-root C:\Program Files (x86)\Steam\steamapps\common\assettocorsa
+[2026-04-27T22:20:59.858Z] ERROR: [GameProcess] Failed to spawn AcAgent.exe: spawn C:\Users\sajid\Desktop\Freelacing\actools\AcAgent\bin\Debug\AcAgent.exe ENOENT
+[2026-04-27T22:20:59.859Z] INFO: [GameProcess] AcAgent exited code=-4058, duration=0.0min
+[2026-04-27T22:21:57.995Z] INFO: [Agent] Using stored device token
+[2026-04-27T22:21:58.044Z] INFO: [Agent] Connected to server — socket -0GgehOJjrrdH3EZAAAF
+[2026-04-27T22:22:18.956Z] INFO: [Agent] START_SESSION received
+[2026-04-27T22:22:18.956Z] INFO: [GameProcess] Launching: C:\Users\sajid\Desktop\Freelacing\actools\AcAgent\bin\Debug\AcAgent.exe --car ferrari_458 --track ks_nordschleife --mode HotLap --duration 1 --ac-root C:\Program Files (x86)\Steam\steamapps\common\assettocorsa
+[2026-04-27T22:22:18.959Z] ERROR: [GameProcess] Failed to spawn AcAgent.exe: spawn C:\Users\sajid\Desktop\Freelacing\actools\AcAgent\bin\Debug\AcAgent.exe ENOENT
+[2026-04-27T22:27:17.537Z] INFO: [Agent] Using stored device token
+[2026-04-27T22:27:17.586Z] INFO: [Agent] Connected to server — socket 3FhaIfABxjSLchotAAAH
+[2026-04-27T22:27:40.906Z] INFO: [Agent] START_SESSION received
+[2026-04-27T22:27:40.907Z] INFO: [GameProcess] Launching: C:\Users\sajid\Desktop\Freelacing\actools\AcAgentCli\bin\Debug\net6.0-windows\AcAgentCli.exe --car lotus_elise_sc --track magione --mode Practice --duration 2 --ac-root C:\Program Files (x86)\Steam\steamapps\common\assettocorsa --easy-assists
+[2026-04-27T22:27:41.108Z] DEBUG: [AcAgent] info: AcAgent.Infrastructure.AcToolsIntegration[0]
+      AcTools integration initialised. AC root: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa
+[2026-04-27T22:27:41.156Z] DEBUG: [AcAgent] info: AcAgent.Services.ReportingService[0]
+      [Reporting] SQLite database ready at C:\Users\sajid\Desktop\Freelacing\actools\AcAgentCli\bin\Debug\net6.0-windows\data\sessions.db
+[2026-04-27T22:27:41.159Z] DEBUG: [AcAgent] info: Program[0]
+      === AcAgent starting session ===
+[2026-04-27T22:27:41.159Z] DEBUG: [AcAgent] info: Program[0]
+        Car    : lotus_elise_sc
+info: Program[0]
+        Track  : magione
+info: Program[0]
+        Mode   : Practice
+info: Program[0]
+        Limit  : 2 minutes
+[2026-04-27T22:27:41.159Z] DEBUG: [AcAgent] info: Program[0]
+        PC ID  : SAJID
+[2026-04-27T22:27:41.162Z] DEBUG: [AcAgent] info: AcAgent.Services.GameLauncherService[0]
+      [Launch] Starting - car=lotus_elise_sc track=magione mode=Practice limit=2min
+[2026-04-27T22:27:41.271Z] DEBUG: [AcAgent] dbug: AcAgent.Infrastructure.AcToolsIntegration[0]
+      Auto-selected skin '0_racing_green' for car 'lotus_elise_sc'.
+[2026-04-27T22:27:41.271Z] DEBUG: [AcAgent] dbug: AcAgent.Infrastructure.AcToolsIntegration[0]
+      Auto-selected skin '0_racing_green' for car 'lotus_elise_sc'.
+[2026-04-27T22:27:41.273Z] DEBUG: [AcAgent] info: AcAgent.Infrastructure.AcToolsIntegration[0]
+      [Config] race.ini written to C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\cfg\race.ini
+[2026-04-27T22:27:41.281Z] DEBUG: [AcAgent] info: AcAgent.Infrastructure.AcToolsIntegration[0]
+      [Config] assists.ini written to C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\cfg\assists.ini
+[2026-04-27T22:27:41.282Z] DEBUG: [AcAgent] info: AcAgent.Services.SessionManager[0]
+      [Session] Started session c9571fa2-ccd8-4a3a-a607-9bd0c501d66d on PC 'SAJID' - lotus_elise_sc @ magione
+[2026-04-27T22:27:41.282Z] DEBUG: [AcAgent] info: AcAgent.Services.GameLauncherService[0]
+      [Launch] Starting: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\AssettoCorsa.exe
+[2026-04-27T22:27:41.414Z] DEBUG: [AcAgent] info: AcAgent.Services.GameLauncherService[0]
+      [Launch] Launcher PID=19436
+info: AcAgent.Services.GameLauncherService[0]
+      [Launch] Polling for game process.
+[2026-04-27T22:29:41.483Z] DEBUG: [AcAgent] warn: AcAgent.Services.GameLauncherService[0]
+      [Launch] Game process not found within 120 s - killing any stragglers and ending session.
+[2026-04-27T22:29:41.594Z] DEBUG: [AcAgent] info: AcAgent.Services.GameLauncherService[0]
+      [Launch] Force-killed residual 'acs' PID=23860.
+[2026-04-27T22:29:41.643Z] DEBUG: [AcAgent] info: AcAgent.Services.GameLauncherService[0]
+      [Launch] Force-killed residual 'AssettoCorsa' PID=18692.
+[2026-04-27T22:29:41.646Z] DEBUG: [AcAgent] info: AcAgent.Services.SessionManager[0]
+      [Session] Ended session c9571fa2-ccd8-4a3a-a607-9bd0c501d66d - actual duration 0.0 min
+[2026-04-27T22:29:41.871Z] DEBUG: [AcAgent] === Session Complete ===
+  Session ID : c9571fa2-ccd8-4a3a-a607-9bd0c501d66d
+  Car        : lotus_elise_sc
+  Track      : magione
+[2026-04-27T22:29:41.871Z] INFO: [GameProcess] Session complete detected from stdout
+[2026-04-27T22:29:41.876Z] DEBUG: [AcAgent] dbug: AcAgent.Services.ReportingService[0]
+      [Reporting] Session c9571fa2-ccd8-4a3a-a607-9bd0c501d66d appended to JSONL log.
+[2026-04-27T22:29:41.892Z] DEBUG: [AcAgent] Started    : 2026-04-27 22:29:41Z
+[2026-04-27T22:29:41.894Z] DEBUG: [AcAgent] dbug: AcAgent.Services.ReportingService[0]
+      [Reporting] Session c9571fa2-ccd8-4a3a-a607-9bd0c501d66d saved to SQLite.
+[2026-04-27T22:29:41.895Z] DEBUG: [AcAgent] Ended      : 2026-04-27 22:29:41Z
+[2026-04-27T22:29:41.895Z] DEBUG: [AcAgent] Duration   : 0.0 min
+[2026-04-27T22:29:41.896Z] DEBUG: [AcAgent] Timer end  : False
+  Early exit : False
+[2026-04-27T22:29:41.897Z] DEBUG: [AcAgent] === Playtime Per Day ===
+[2026-04-27T22:29:41.902Z] DEBUG: [AcAgent] 2026-04-27    0.0 min
+
+=== Playtime Per PC ===
+[2026-04-27T22:29:41.904Z] DEBUG: [AcAgent] SAJID    0.0 min  (1 sessions)
+[2026-04-27T22:29:41.956Z] INFO: [GameProcess] AcAgent exited code=0, duration=2.0min
+[2026-04-27T22:31:55.815Z] WARN: [Agent] Disconnected: transport close
+[2026-04-27T22:31:58.158Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:03.201Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:08.240Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:13.282Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:18.309Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:23.346Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:28.362Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:33.395Z] ERROR: [Agent] Connection error: xhr poll error
+[2026-04-27T22:32:38.432Z] INFO: [Agent] Connected to server — socket OlMALB0Yz8D-mAfaAAAB

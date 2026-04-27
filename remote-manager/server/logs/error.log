@@ -1,0 +1,8 @@
+[2026-04-27T22:18:19.263Z] ERROR: [DB] Query error: Provided value cannot be bound to SQLite parameter 6.
+SQL: INSERT INTO sessions
+         (device_id, car_id, track_id, track_layout, mode, easy_assists, configured_duration_min, status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,'pending')
+       RETURNING *
+[2026-04-27T22:18:19.264Z] ERROR: Provided value cannot be bound to SQLite parameter 6. {"stack":"TypeError: Provided value cannot be bound to SQLite parameter 6.\n    at Object.query (C:\\Users\\sajid\\Desktop\\Freelacing\\actools\\remote-manager\\server\\src\\db\\pool.js:53:25)\n    at exports.startSession (C:\\Users\\sajid\\Desktop\\Freelacing\\actools\\remote-manager\\server\\src\\controllers\\sessionController.js:38:43)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"}
+[2026-04-27T22:20:59.862Z] ERROR: [Socket] SESSION_ERROR on 8f899a76230104fbbb43bf7dd3fccfa4: Spawn failed: spawn C:\Users\sajid\Desktop\Freelacing\actools\AcAgent\bin\Debug\AcAgent.exe ENOENT
+[2026-04-27T22:22:18.961Z] ERROR: [Socket] SESSION_ERROR on 837696bc86adcf42c3f1c47d1087213d: Spawn failed: spawn C:\Users\sajid\Desktop\Freelacing\actools\AcAgent\bin\Debug\AcAgent.exe ENOENT

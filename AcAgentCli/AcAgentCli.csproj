@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Console app — no WPF, no window, fully CLI-driven -->
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>AcAgentCli</AssemblyName>
+    <RootNamespace>AcAgent</RootNamespace>
+    <!-- Must stay x86 — acs.exe is 32-bit -->
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!--
+    Re-use all service/model/infra files from the sibling AcAgent WPF project.
+    Explicitly include the CLI entry point (Program.cs) which the WPF project excludes.
+    Explicitly exclude WPF-specific files (App.xaml, MainWindow.xaml, Resources).
+  -->
+  <ItemGroup>
+    <!-- Entry point -->
+    <Compile Include="..\AcAgent\Program.cs" />
+    <Compile Include="..\AcAgent\GlobalUsings.cs" />
+
+    <!-- Models -->
+    <Compile Include="..\AcAgent\Models\GameConfig.cs" />
+    <Compile Include="..\AcAgent\Models\Session.cs" />
+
+    <!-- Infrastructure -->
+    <Compile Include="..\AcAgent\Infrastructure\AcToolsIntegration.cs" />
+
+    <!-- Services -->
+    <Compile Include="..\AcAgent\Services\GameLauncherService.cs" />
+    <Compile Include="..\AcAgent\Services\SessionManager.cs" />
+    <Compile Include="..\AcAgent\Services\ReportingService.cs" />
+  </ItemGroup>
+
+  <!-- Copy appsettings.json from the sibling project -->
+  <ItemGroup>
+    <None Include="..\AcAgent\appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>appsettings.json</Link>
+    </None>
+  </ItemGroup>
+
+  <!-- Same NuGet packages as AcAgent.csproj -->
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json"                               Version="13.0.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite"                         Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"      Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.Logging"                  Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console"          Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.Configuration"            Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json"       Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
+    <PackageReference Include="ClosedXML"                                     Version="0.102.2" />
+  </ItemGroup>
+
+  <!-- AcTools.dll (built separately from AcTools/AcTools.csproj) -->
+  <ItemGroup>
+    <Reference Include="AcTools">
+      <HintPath>..\Output\x86\Debug\AcTools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
