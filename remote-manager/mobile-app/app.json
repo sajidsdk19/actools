@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "AC Remote Manager",
+    "slug": "ac-remote-manager",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0A0A0F"
+    },
+    "ios":     { "supportsTablet": true },
+    "android": { "adaptiveIcon": { "backgroundColor": "#0A0A0F" }, "edgeToEdgeEnabled": true },
+    "web":     { "bundler": "metro" }
+  }
+}
