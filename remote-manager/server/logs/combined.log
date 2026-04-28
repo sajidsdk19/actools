@@ -35,3 +35,10 @@ SQL: INSERT INTO sessions
 [2026-04-27T22:32:38.267Z] INFO: Server listening on :4000
 [2026-04-27T22:32:38.425Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
 [2026-04-27T22:36:04.283Z] INFO: [Reporting] Daily report for 2026-04-27: 2 sessions, 2.02 min
+[2026-04-27T22:47:48.436Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-27T23:01:21.363Z] INFO: [Socket] Dashboard connected: f9O0qgsN-Wp0mNZAAAAG
+[2026-04-27T23:01:35.075Z] INFO: [Socket] Dashboard connected: SJYd5RrUUY14PNkqAAAI
+[2026-04-27T23:02:10.620Z] INFO: [Socket] Dashboard connected: beVd5HR8hZMqE-wVAAAL
+[2026-04-27T23:02:37.301Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session e9d8ddcc7b9b8e3d5f15bd513cc03be8
+[2026-04-27T23:02:38.056Z] INFO: [Socket] SESSION_ENDED: e9d8ddcc7b9b8e3d5f15bd513cc03be8 — 0.0 min
+[2026-04-27T23:04:38.271Z] INFO: [Socket] SESSION_ENDED: e9d8ddcc7b9b8e3d5f15bd513cc03be8 — 2.0 min
