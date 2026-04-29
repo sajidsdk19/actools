@@ -25,25 +25,53 @@ namespace AcAgent.Infrastructure;
 /// </summary>
 public sealed class AcToolsIntegration
 {
-    private readonly string _acRoot;
+    private string _acRoot;
     private readonly ILogger<AcToolsIntegration> _logger;
+
+    /// <summary>The current Assetto Corsa root directory being used.</summary>
+    public string AcRoot => _acRoot;
 
     public AcToolsIntegration(string acRoot, ILogger<AcToolsIntegration> logger)
     {
-        if (!AcPaths.IsAcRoot(acRoot))
-            throw new DirectoryNotFoundException(
-                $"'{acRoot}' does not look like a valid Assetto Corsa root. " +
-                "Make sure it contains acs.exe and content/cars/.");
-
         _acRoot = acRoot;
         _logger = logger;
 
-        // Tell AcTools where the AC root lives.  Several path helpers depend
-        // on this static property (e.g. AcRootDirectory.Instance in the full
-        // AcManager stack).  For the standalone AcTools DLL we set paths
-        // directly via AcPaths static members.
+        // Relax AcTools' own internal path checks — we do our own validation below.
         AcPaths.OptionEaseAcRootCheck = true;
-        _logger.LogInformation("AcTools integration initialised. AC root: {AcRoot}", acRoot);
+
+        if (!AcPaths.IsAcRoot(acRoot))
+        {
+            // Log a clear, actionable warning instead of crashing the whole process.
+            // This lets the agent stay running (and visible in the dashboard) even
+            // when AC_ROOT in .env is wrong, so the operator can diagnose and fix it.
+            _logger.LogWarning(
+                "[AcToolsIntegration] ⚠  AC root not valid: '{AcRoot}'. " +
+                "Expected acs.exe and content/cars/ to be present. " +
+                "Set AC_ROOT in .env or pass --ac-root <path> to AcAgent.exe. " +
+                "Sessions will fail until this is corrected.", acRoot);
+        }
+        else
+        {
+            _logger.LogInformation(
+                "[AcToolsIntegration] AC root OK: {AcRoot}", acRoot);
+        }
+    }
+
+    /// <summary>
+    /// Changes the AC root at runtime (called when the user picks a new folder
+    /// in the Game Directory box). Updates the path and re-validates.
+    /// </summary>
+    public void SetAcRoot(string newRoot)
+    {
+        _acRoot = newRoot;
+        AcPaths.OptionEaseAcRootCheck = true;
+
+        if (!AcPaths.IsAcRoot(newRoot))
+            _logger.LogWarning(
+                "[AcToolsIntegration] SetAcRoot: '{Root}' does not appear valid.", newRoot);
+        else
+            _logger.LogInformation(
+                "[AcToolsIntegration] SetAcRoot: AC root updated to '{Root}'.", newRoot);
     }
 
     // ── Content discovery ────────────────────────────────────────────────────

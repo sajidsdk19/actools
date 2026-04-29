@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  output: 'standalone',   // Required for Electron packaging — produces a self-contained server.js
 };
 
 export default nextConfig;
+

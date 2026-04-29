@@ -13,15 +13,23 @@ export function SocketProvider({ token, children }) {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    if (!token) return;
+    // Connect with whatever token is given (even null/bypass — server allows it via BYPASS_AUTH)
+    const authPayload = token
+      ? { type: "dashboard", jwtToken: token }
+      : { type: "dashboard", jwtToken: "bypass" };
 
     const s = io(SERVER_URL, {
-      auth: { type: "dashboard", jwtToken: token },
+      auth: authPayload,
+      reconnection: true,
       reconnectionDelay: 2000,
+      reconnectionAttempts: Infinity,
     });
 
     s.on("connect", () => setConnected(true));
     s.on("disconnect", () => setConnected(false));
+    s.on("connect_error", (err) => {
+      console.warn("[Socket] Connection error:", err.message);
+    });
 
     socketRef.current = s;
     setSocket(s);

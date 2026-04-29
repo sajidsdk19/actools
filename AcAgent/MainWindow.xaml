@@ -154,6 +154,7 @@
                         <RowDefinition Height="Auto"/>   <!-- Duration -->
                         <RowDefinition Height="Auto"/>   <!-- Assists -->
                         <RowDefinition Height="Auto"/>   <!-- Player name -->
+                        <RowDefinition Height="Auto"/>   <!-- Game Directory -->
                         <RowDefinition Height="*"/>      <!-- Spacer -->
                         <RowDefinition Height="Auto"/>   <!-- Selection preview -->
                         <RowDefinition Height="Auto"/>   <!-- Launch button -->
@@ -221,8 +222,36 @@
                                  Tag="Your name..."/>
                     </StackPanel>
 
+                    <!-- Game Directory -->
+                    <StackPanel Grid.Row="5" Margin="0,0,0,18">
+                        <TextBlock Text="GAME DIRECTORY" Style="{StaticResource SectionHeader}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="AcRootBox"
+                                     Grid.Column="0"
+                                     Style="{StaticResource SearchBox}"
+                                     Tag="AC install path..."
+                                     FontSize="10"
+                                     TextChanged="AcRootBox_TextChanged"/>
+                            <Button Grid.Column="2" x:Name="BrowseAcRootBtn"
+                                    Content="📁"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Width="36" Height="32"
+                                    Click="BrowseAcRootBtn_Click"
+                                    ToolTip="Browse for Assetto Corsa folder"/>
+                        </Grid>
+                        <TextBlock x:Name="AcRootStatusLabel"
+                                   Text="" FontSize="10" Margin="0,4,0,0"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+
                     <!-- Selection preview card -->
-                    <Border Grid.Row="6" Background="{StaticResource BgCard}"
+                    <Border Grid.Row="7" Background="{StaticResource BgCard}"
                             CornerRadius="8" Padding="14,12" Margin="0,0,0,12">
                         <StackPanel>
                             <TextBlock Text="SELECTED SESSION" Style="{StaticResource SectionHeader}"
@@ -244,10 +273,10 @@
                     </Border>
 
                     <!-- Launch button -->
-                    <Button Grid.Row="7" x:Name="LaunchBtn"
+                    <Button Grid.Row="8" x:Name="LaunchBtn"
                             Content="🚀  LAUNCH RACE"
                             Style="{StaticResource LaunchButton}"
-                            IsEnabled="False"
+                            IsEnabled="True"
                             Click="LaunchBtn_Click"/>
                 </Grid>
             </Grid>
@@ -265,7 +294,7 @@
                              Fill="{StaticResource Success}"
                              VerticalAlignment="Center" Margin="0,0,8,0"/>
                     <TextBlock x:Name="StatusLabel" Grid.Column="1"
-                               Text="Ready — select a car and track to begin"
+                               Text="Ready — configure session and click Launch Race"
                                FontSize="12" Foreground="{StaticResource TextSecondary}"
                                VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="2"

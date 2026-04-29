@@ -89,6 +89,12 @@ function registerSocketHandlers(io) {
 
     // ── Dashboard connection ──────────────────────────────────────────────────
     if (type === 'dashboard') {
+      // Allow bypass when BYPASS_AUTH=true (Electron / no-login mode)
+      if (process.env.BYPASS_AUTH === 'true') {
+        socket.join('dashboard');
+        logger.info(`[Socket] Dashboard connected (bypass): ${socket.id}`);
+        return;
+      }
       try {
         jwt.verify(jwtToken, process.env.JWT_SECRET);
         socket.join('dashboard');

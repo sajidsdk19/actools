@@ -1,9 +1,11 @@
 using AcAgent.Infrastructure;
 using AcAgent.Models;
 using AcAgent.Services;
+using AcTools.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  AcAgent – Assetto Corsa launcher / session manager
@@ -30,11 +32,25 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // ── Resolve AC root directory ─────────────────────────────────────────────
-//    Priority: --ac-root CLI arg  →  ACTOOLS_ROOT env-var  →  appsettings.json  →  default
+//    Priority: --ac-root CLI arg  →  ACTOOLS_ROOT env-var  →  appsettings.json  →  auto-discover
 var acRoot = cli.AcRoot
-    ?? configuration["ACTOOLS_ROOT"]               // env-var (loaded above)
+    ?? configuration["ACTOOLS_ROOT"]               // env-var
     ?? configuration["AcRoot"]                     // appsettings.json key
-    ?? @"C:\Program Files (x86)\Steam\steamapps\common\assettocorsa";
+    ?? AutoDiscoverAcRoot();                       // scan registry + all drives
+
+// Log what we resolved before constructing services (so the user sees it clearly)
+var bootstrapLogger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<Program>();
+bootstrapLogger.LogInformation("[AcAgent] Resolved AC root: {AcRoot}", acRoot);
+
+if (!AcPaths.IsAcRoot(acRoot))
+{
+    bootstrapLogger.LogWarning(
+        "[AcAgent] ⚠  '{AcRoot}' does not look like a valid AC root " +
+        "(missing acs.exe or content/cars/). " +
+        "Pass the correct path via --ac-root, set AC_ROOT in .env, " +
+        "or add \"AcRoot\" to appsettings.json.", acRoot);
+    // Continue anyway — the launcher will surface a clearer error if a session starts.
+}
 
 // ── Build the DI container ────────────────────────────────────────────────
 await using var services = BuildServices(acRoot);
@@ -187,6 +203,95 @@ static async Task PrintReportAsync(ReportingService reporting)
     if (pcs.Count == 0) Console.WriteLine("  (no sessions recorded yet)");
     else foreach (var p in pcs)
         Console.WriteLine($"  {p.PcId}  \u2192  {p.TotalMinutes:F1} min  ({p.SessionCount} sessions)");
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  AC root auto-discovery
+// ════════════════════════════════════════════════════════════════════════════
+
+/// <summary>
+/// Tries to locate the Assetto Corsa root folder without any configuration.
+/// Strategy (in order):
+///   1. Windows Registry → Steam InstallPath → steamapps\common\assettocorsa
+///   2. Scan every available drive letter for common Steam library locations.
+///   3. Fall back to the traditional default (may not exist).
+/// </summary>
+static string AutoDiscoverAcRoot()
+{
+    const string acRelative = @"steamapps\common\assettocorsa";
+
+    // 1 ── Registry: find where Steam itself is installed ───────────────────
+    try
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam")
+                     ?? Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam")
+                     ?? Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam");
+
+        if (key?.GetValue("SteamPath") is string steamPath)
+        {
+            // Steam stores the path with forward-slashes; normalise.
+            steamPath = steamPath.Replace('/', '\\');
+            var candidate = Path.Combine(steamPath, acRelative);
+            if (AcPaths.IsAcRoot(candidate))
+                return candidate;
+
+            // Also check libraryfolders.vdf for additional Steam library paths
+            var libFile = Path.Combine(steamPath, @"steamapps\libraryfolders.vdf");
+            if (File.Exists(libFile))
+            {
+                foreach (var lib in ParseSteamLibraries(libFile))
+                {
+                    var libCandidate = Path.Combine(lib, acRelative);
+                    if (AcPaths.IsAcRoot(libCandidate))
+                        return libCandidate;
+                }
+            }
+        }
+    }
+    catch { /* registry unavailable — continue */ }
+
+    // 2 ── Brute-force: scan every drive letter ─────────────────────────────
+    var stemPaths = new[]
+    {
+        @"Steam\steamapps\common\assettocorsa",
+        @"SteamLibrary\steamapps\common\assettocorsa",
+        @"Games\Steam\steamapps\common\assettocorsa",
+        @"Program Files (x86)\Steam\steamapps\common\assettocorsa",
+        @"Program Files\Steam\steamapps\common\assettocorsa",
+    };
+
+    foreach (var drive in DriveInfo.GetDrives()
+                 .Where(d => d.IsReady && d.DriveType == DriveType.Fixed)
+                 .Select(d => d.RootDirectory.FullName))
+    {
+        foreach (var stem in stemPaths)
+        {
+            var candidate = Path.Combine(drive, stem);
+            if (AcPaths.IsAcRoot(candidate))
+                return candidate;
+        }
+    }
+
+    // 3 ── Give up and return the traditional default ────────────────────────
+    return @"C:\Program Files (x86)\Steam\steamapps\common\assettocorsa";
+}
+
+/// <summary>
+/// Parses Steam's libraryfolders.vdf to extract additional library root paths.
+/// Only handles the modern JSON-like VDF format (Steam circa 2021+).
+/// </summary>
+static IEnumerable<string> ParseSteamLibraries(string vdfPath)
+{
+    // Lines look like:  "path"   "D:\SteamLibrary"
+    foreach (var line in File.ReadLines(vdfPath))
+    {
+        var trimmed = line.Trim();
+        if (!trimmed.StartsWith('"')) continue;
+
+        var parts = trimmed.Split('"', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2 && parts[0].Equals("path", StringComparison.OrdinalIgnoreCase))
+            yield return parts[1].Replace(@"\\", @"\");
+    }
 }
 
 // ════════════════════════════════════════════════════════════════════════════

@@ -2,26 +2,25 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { SocketProvider, useSocket } from "@/context/SocketProvider";
-import LoginPage from "@/components/LoginPage";
 import DeviceCard from "@/components/DeviceCard";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:4000";
 
-// ── Inner dashboard (needs socket context) ────────────────────────────────────
-function Dashboard({ token, user, onLogout }) {
+// ── Inner dashboard ───────────────────────────────────────────────────────────
+function Dashboard({ token }) {
   const { connected } = useSocket();
-  const [devices, setDevices] = useState([]);
+  const [devices, setDevices]   = useState([]);
   const [sessions, setSessions] = useState([]);
-  const [report, setReport] = useState(null);
-  const [tab, setTab] = useState("devices"); // devices | sessions | reports
-  const [loading, setLoading] = useState(true);
+  const [report, setReport]     = useState(null);
+  const [tab, setTab]           = useState("devices");
+  const [loading, setLoading]   = useState(true);
 
   const authHeaders = { Authorization: `Bearer ${token}` };
 
   const fetchAll = useCallback(async () => {
     try {
       const [devRes, sessRes] = await Promise.all([
-        fetch(`${SERVER_URL}/devices`, { headers: authHeaders }),
+        fetch(`${SERVER_URL}/devices`,  { headers: authHeaders }),
         fetch(`${SERVER_URL}/sessions`, { headers: authHeaders }),
       ]);
       setDevices(await devRes.json());
@@ -41,8 +40,8 @@ function Dashboard({ token, user, onLogout }) {
 
   useEffect(() => { fetchAll(); fetchReport(); }, [fetchAll, fetchReport]);
 
-  const onlineCount   = devices.filter(d => d.status !== "offline").length;
-  const activeCount   = devices.filter(d => d.status === "in_session").length;
+  const onlineCount    = devices.filter(d => d.status !== "offline").length;
+  const activeCount    = devices.filter(d => d.status === "in_session").length;
   const completedToday = report?.total_sessions ?? 0;
   const minutesToday   = report?.total_minutes  ?? 0;
 
@@ -64,8 +63,6 @@ function Dashboard({ token, user, onLogout }) {
               <span className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-400 animate-pulse" : "bg-gray-600"}`}/>
               <span className="text-xs text-gray-400">{connected ? "Live" : "Offline"}</span>
             </div>
-            <span className="text-xs text-gray-500">{user?.email}</span>
-            <button onClick={onLogout} className="text-xs text-gray-500 hover:text-white transition">Sign out</button>
           </div>
         </div>
       </header>
@@ -74,10 +71,10 @@ function Dashboard({ token, user, onLogout }) {
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label: "PCs Online",    value: onlineCount,     color: "text-emerald-400" },
-            { label: "In Session",    value: activeCount,     color: "text-amber-400"   },
-            { label: "Sessions Today",value: completedToday,  color: "text-blue-400"    },
-            { label: "Minutes Today", value: minutesToday.toFixed(1), color: "text-purple-400" },
+            { label: "PCs Online",     value: onlineCount,                color: "text-emerald-400" },
+            { label: "In Session",     value: activeCount,                color: "text-amber-400"   },
+            { label: "Sessions Today", value: completedToday,             color: "text-blue-400"    },
+            { label: "Minutes Today",  value: minutesToday.toFixed(1),    color: "text-purple-400"  },
           ].map(s => (
             <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-2xl px-5 py-4">
               <p className="text-gray-500 text-xs mb-1">{s.label}</p>
@@ -216,36 +213,48 @@ function Dashboard({ token, user, onLogout }) {
   );
 }
 
-// ── Root page (auth gate) ─────────────────────────────────────────────────────
+// ── Root page — auto-login via bypass token ───────────────────────────────────
 export default function Page() {
   const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const t = localStorage.getItem("ac_token");
-    const u = localStorage.getItem("ac_user");
-    if (t && u) { setToken(t); setUser(JSON.parse(u)); }
+    // Try to get a bypass token from the server (no login needed)
+    const SERVER = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:4000";
+    fetch(`${SERVER}/auth/bypass-token`)
+      .then(r => r.json())
+      .then(d => {
+        if (d.token) setToken(d.token);
+        else setError("Server bypass auth not enabled. Check BYPASS_AUTH=true in server .env");
+      })
+      .catch(() => setError("Cannot reach server at " + SERVER));
   }, []);
 
-  function handleLogin(t, u) {
-    localStorage.setItem("ac_token", t);
-    localStorage.setItem("ac_user", JSON.stringify(u));
-    setToken(t);
-    setUser(u);
-  }
+  if (error) return (
+    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="text-center space-y-3">
+        <div className="text-4xl">⚡</div>
+        <p className="text-red-400 text-sm">{error}</p>
+        <button onClick={() => window.location.reload()}
+          className="text-xs text-gray-500 hover:text-white border border-gray-700 px-3 py-1 rounded-lg">
+          Retry
+        </button>
+      </div>
+    </div>
+  );
 
-  function handleLogout() {
-    localStorage.removeItem("ac_token");
-    localStorage.removeItem("ac_user");
-    setToken(null);
-    setUser(null);
-  }
-
-  if (!token) return <LoginPage onLogin={handleLogin} />;
+  if (!token) return (
+    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="text-center space-y-3">
+        <div className="text-4xl animate-pulse">⚡</div>
+        <p className="text-gray-500 text-sm">Connecting to server…</p>
+      </div>
+    </div>
+  );
 
   return (
     <SocketProvider token={token}>
-      <Dashboard token={token} user={user} onLogout={handleLogout} />
+      <Dashboard token={token} />
     </SocketProvider>
   );
 }

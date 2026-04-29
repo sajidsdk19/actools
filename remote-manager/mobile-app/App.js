@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   View, Text, ScrollView, TouchableOpacity, TextInput,
-  StyleSheet, StatusBar, Switch, ActivityIndicator, Alert,
+  StyleSheet, StatusBar, Switch, ActivityIndicator, Alert, Modal,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
-
-const SERVER_URL = "http://localhost:4000"; // change to your server IP for real device
 
 // ── Colours ────────────────────────────────────────────────────────────────────
 const C = {
@@ -19,11 +18,15 @@ const C = {
   muted:     "#6B7280",
   text:      "#F9FAFB",
   textDim:   "#9CA3AF",
+  blue:      "#3B82F6",
 };
+
+const STORAGE_KEY = "ac_server_url";
+const DEFAULT_URL = "http://192.168.1.100:4000"; // placeholder, user sets in settings
 
 function fmt(s) {
   if (s == null) return "--:--";
-  const m = Math.floor(s / 60).toString().padStart(2, "0");
+  const m  = Math.floor(s / 60).toString().padStart(2, "0");
   const sc = Math.floor(s % 60).toString().padStart(2, "0");
   return `${m}:${sc}`;
 }
@@ -41,38 +44,38 @@ function Badge({ status }) {
 }
 
 // ── Device card ──────────────────────────────────────────────────────────────
-function DeviceCard({ device, token, socket }) {
-  const [status, setStatus] = useState(device.status);
+function DeviceCard({ device, token, socket, serverUrl }) {
+  const [status,    setStatus]    = useState(device.status);
   const [remaining, setRemaining] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [car, setCar] = useState("lotus_elise_sc");
-  const [track, setTrack] = useState("magione");
-  const [duration, setDuration] = useState("30");
-  const [easy, setEasy] = useState(false);
+  const [showForm,  setShowForm]  = useState(false);
+  const [car,       setCar]       = useState("lotus_elise_sc");
+  const [track,     setTrack]     = useState("magione");
+  const [duration,  setDuration]  = useState("30");
+  const [easy,      setEasy]      = useState(false);
   const [launching, setLaunching] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
     const onStatus = ({ deviceId, status: s }) => { if (deviceId === device.id) setStatus(s); };
-    const onConn   = ({ deviceId }) => { if (deviceId === device.id) setStatus("online"); };
-    const onDisc   = ({ deviceId }) => { if (deviceId === device.id) { setStatus("offline"); setRemaining(null); } };
+    const onConn   = ({ deviceId })            => { if (deviceId === device.id) setStatus("online"); };
+    const onDisc   = ({ deviceId })            => { if (deviceId === device.id) { setStatus("offline"); setRemaining(null); } };
     const onTimer  = ({ deviceId, remainingSeconds: r }) => { if (deviceId === device.id) setRemaining(r); };
     const onEnded  = ({ deviceId }) => { if (deviceId === device.id) { setStatus("online"); setRemaining(null); setLaunching(false); } };
     const onError  = ({ deviceId, error: e }) => { if (deviceId === device.id) { setStatus("online"); setLaunching(false); Alert.alert("Session Error", e); } };
 
     socket.on("device_status_changed", onStatus);
-    socket.on("device_connected", onConn);
-    socket.on("device_disconnected", onDisc);
-    socket.on("timer_update", onTimer);
-    socket.on("session_ended", onEnded);
-    socket.on("session_error", onError);
+    socket.on("device_connected",      onConn);
+    socket.on("device_disconnected",   onDisc);
+    socket.on("timer_update",          onTimer);
+    socket.on("session_ended",         onEnded);
+    socket.on("session_error",         onError);
     return () => {
       socket.off("device_status_changed", onStatus);
-      socket.off("device_connected", onConn);
-      socket.off("device_disconnected", onDisc);
-      socket.off("timer_update", onTimer);
-      socket.off("session_ended", onEnded);
-      socket.off("session_error", onError);
+      socket.off("device_connected",      onConn);
+      socket.off("device_disconnected",   onDisc);
+      socket.off("timer_update",          onTimer);
+      socket.off("session_ended",         onEnded);
+      socket.off("session_error",         onError);
     };
   }, [socket, device.id]);
 
@@ -80,7 +83,7 @@ function DeviceCard({ device, token, socket }) {
     setLaunching(true);
     setShowForm(false);
     try {
-      const res = await fetch(`${SERVER_URL}/sessions/start`, {
+      const res = await fetch(`${serverUrl}/sessions/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ deviceId: device.id, carId: car, trackId: track, durationMinutes: Number(duration), easyAssists: easy }),
@@ -88,15 +91,15 @@ function DeviceCard({ device, token, socket }) {
       const data = await res.json();
       if (!res.ok) { Alert.alert("Error", data.error); setLaunching(false); }
     } catch (e) { Alert.alert("Error", e.message); setLaunching(false); }
-  }, [device.id, token, car, track, duration, easy]);
+  }, [device.id, token, car, track, duration, easy, serverUrl]);
 
   const forceStop = useCallback(async () => {
-    await fetch(`${SERVER_URL}/sessions/force-stop`, {
+    await fetch(`${serverUrl}/sessions/force-stop`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ deviceId: device.id }),
     });
-  }, [device.id, token]);
+  }, [device.id, token, serverUrl]);
 
   return (
     <View style={styles.card}>
@@ -122,7 +125,7 @@ function DeviceCard({ device, token, socket }) {
         </View>
       )}
 
-      {/* Actions */}
+      {/* Launch */}
       {status === "online" && !launching && (
         <View>
           <TouchableOpacity style={styles.launchBtn} onPress={() => setShowForm(f => !f)}>
@@ -131,17 +134,16 @@ function DeviceCard({ device, token, socket }) {
           {showForm && (
             <View style={styles.form}>
               {[
-                { label: "Car ID", val: car, set: setCar, ph: "lotus_elise_sc" },
-                { label: "Track ID", val: track, set: setTrack, ph: "magione" },
-                { label: "Duration (min)", val: duration, set: setDuration, ph: "30", num: true },
+                { label: "Car ID",        val: car,      set: setCar,      ph: "lotus_elise_sc" },
+                { label: "Track ID",      val: track,    set: setTrack,    ph: "magione"        },
+                { label: "Duration (min)",val: duration,  set: setDuration, ph: "30", num: true  },
               ].map(f => (
                 <View key={f.label} style={styles.formRow}>
                   <Text style={styles.formLabel}>{f.label}</Text>
                   <TextInput
                     value={f.val} onChangeText={f.set} placeholder={f.ph}
                     keyboardType={f.num ? "numeric" : "default"}
-                    placeholderTextColor={C.muted}
-                    style={styles.input}
+                    placeholderTextColor={C.muted} style={styles.input}
                   />
                 </View>
               ))}
@@ -171,178 +173,270 @@ function DeviceCard({ device, token, socket }) {
   );
 }
 
+// ── Settings modal ────────────────────────────────────────────────────────────
+function SettingsModal({ visible, currentUrl, onSave, onClose }) {
+  const [url, setUrl] = useState(currentUrl);
+  return (
+    <Modal visible={visible} animationType="slide" transparent presentationStyle="pageSheet">
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalCard}>
+          <Text style={styles.modalTitle}>Server Settings</Text>
+          <Text style={styles.modalSub}>Enter the LAN IP address of the boss PC running the server.</Text>
+
+          <Text style={[styles.formLabel, { marginTop: 20, marginBottom: 6 }]}>Server URL</Text>
+          <TextInput
+            value={url}
+            onChangeText={setUrl}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="url"
+            placeholder="http://192.168.1.100:4000"
+            placeholderTextColor={C.muted}
+            style={[styles.input, { marginLeft: 0, marginBottom: 8 }]}
+          />
+          <Text style={{ color: C.muted, fontSize: 11, marginBottom: 24 }}>
+            Example: http://192.168.1.100:4000
+          </Text>
+
+          <TouchableOpacity style={styles.launchBtn} onPress={() => onSave(url.trim())}>
+            <Text style={styles.launchBtnText}>Save & Connect</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onClose} style={{ alignItems: "center", marginTop: 14 }}>
+            <Text style={{ color: C.muted, fontSize: 13 }}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 // ── Main App ──────────────────────────────────────────────────────────────────
 export default function App() {
-  const [token, setToken] = useState(null);
-  const [email, setEmail] = useState("admin@ac.local");
-  const [password, setPassword] = useState("");
-  const [loginErr, setLoginErr] = useState("");
-  const [loginLoading, setLoginLoading] = useState(false);
+  const [serverUrl,  setServerUrl]  = useState(null);         // null = not configured yet
+  const [token,      setToken]      = useState(null);
+  const [tokenError, setTokenError] = useState(null);
+  const [socket,     setSocket]     = useState(null);
+  const [connected,  setConnected]  = useState(false);
+  const [devices,    setDevices]    = useState([]);
+  const [stats,      setStats]      = useState({ sessions: 0, minutes: 0 });
+  const [showSettings, setShowSettings] = useState(false);
 
-  const [socket, setSocket] = useState(null);
-  const [connected, setConnected] = useState(false);
-  const [devices, setDevices] = useState([]);
-  const [stats, setStats] = useState({ sessions: 0, minutes: 0 });
-  const [tab, setTab] = useState("devices");
-
-  // Socket setup
+  // ── Load saved server URL from storage ────────────────────────────────────
   useEffect(() => {
-    if (!token) return;
-    const s = io(SERVER_URL, { auth: { type: "dashboard", jwtToken: token } });
-    s.on("connect", () => setConnected(true));
+    AsyncStorage.getItem(STORAGE_KEY).then(saved => {
+      if (saved) {
+        setServerUrl(saved);
+      } else {
+        // First launch — show settings immediately
+        setShowSettings(true);
+      }
+    });
+  }, []);
+
+  // ── Auto-fetch bypass token when serverUrl is set ─────────────────────────
+  useEffect(() => {
+    if (!serverUrl) return;
+    setToken(null);
+    setTokenError(null);
+
+    fetch(`${serverUrl}/auth/bypass-token`)
+      .then(r => r.json())
+      .then(d => {
+        if (d.token) setToken(d.token);
+        else setTokenError("Server has auth enabled. Set BYPASS_AUTH=true on the server.");
+      })
+      .catch(() => setTokenError(`Cannot reach server at ${serverUrl}`));
+  }, [serverUrl]);
+
+  // ── Socket + data fetch when token is available ───────────────────────────
+  useEffect(() => {
+    if (!token || !serverUrl) return;
+
+    const s = io(serverUrl, {
+      auth: { type: "dashboard", jwtToken: token },
+      reconnectionDelay: 2000,
+    });
+    s.on("connect",    () => setConnected(true));
     s.on("disconnect", () => setConnected(false));
+
+    s.on("device_connected",    () => refreshDevices(token));
+    s.on("device_disconnected", () => refreshDevices(token));
+
     setSocket(s);
-
-    fetch(`${SERVER_URL}/devices`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => setDevices(Array.isArray(d) ? d : [d].filter(Boolean)));
-
-    const today = new Date().toISOString().slice(0, 10);
-    fetch(`${SERVER_URL}/reports/daily?date=${today}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(r => setStats({ sessions: r.total_sessions, minutes: r.total_minutes }));
+    refreshDevices(token);
+    refreshStats(token);
 
     return () => s.disconnect();
-  }, [token]);
+  }, [token, serverUrl]);
 
-  const login = useCallback(async () => {
-    setLoginLoading(true); setLoginErr("");
+  const refreshDevices = useCallback(async (t) => {
     try {
-      const res = await fetch(`${SERVER_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const d = await res.json();
-      if (!res.ok) throw new Error(d.error);
-      setToken(d.token);
-    } catch (e) { setLoginErr(e.message); }
-    finally { setLoginLoading(false); }
-  }, [email, password]);
+      const r = await fetch(`${serverUrl}/devices`, { headers: { Authorization: `Bearer ${t}` } });
+      const d = await r.json();
+      setDevices(Array.isArray(d) ? d : []);
+    } catch {}
+  }, [serverUrl]);
 
-  // ── Login screen ────────────────────────────────────────────────────────────
-  if (!token) return (
-    <View style={styles.loginScreen}>
-      <StatusBar barStyle="light-content" backgroundColor={C.bg} />
-      <View style={styles.logoBox}>
-        <Text style={styles.logoIcon}>⚡</Text>
+  const refreshStats = useCallback(async (t) => {
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const r = await fetch(`${serverUrl}/reports/daily?date=${today}`, { headers: { Authorization: `Bearer ${t}` } });
+      const d = await r.json();
+      setStats({ sessions: d.total_sessions || 0, minutes: parseFloat(d.total_minutes || 0).toFixed(0) });
+    } catch {}
+  }, [serverUrl]);
+
+  const handleSaveUrl = async (url) => {
+    await AsyncStorage.setItem(STORAGE_KEY, url);
+    setServerUrl(url);
+    setShowSettings(false);
+  };
+
+  // ── First-launch / settings screen ───────────────────────────────────────
+  if (!serverUrl && !showSettings) {
+    return (
+      <View style={styles.root}>
+        <StatusBar barStyle="light-content" backgroundColor={C.bg} />
+        <ActivityIndicator color={C.red} />
       </View>
-      <Text style={styles.loginTitle}>AC Remote Manager</Text>
-      <Text style={styles.loginSub}>Assetto Corsa Session Control</Text>
+    );
+  }
 
-      <View style={styles.loginCard}>
-        <Text style={styles.formLabel}>Email</Text>
-        <TextInput value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none"
-          style={[styles.input, { marginBottom: 12 }]} placeholderTextColor={C.muted} />
-        <Text style={styles.formLabel}>Password</Text>
-        <TextInput value={password} onChangeText={setPassword} secureTextEntry placeholder="••••••••"
-          style={[styles.input, { marginBottom: 16 }]} placeholderTextColor={C.muted} />
-        {loginErr ? <Text style={styles.error}>{loginErr}</Text> : null}
-        <TouchableOpacity style={styles.launchBtn} onPress={login} disabled={loginLoading}>
-          {loginLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.launchBtnText}>Sign In</Text>}
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  // ── Loading / error state ─────────────────────────────────────────────────
+  const isLoading = serverUrl && !token && !tokenError;
+  const hasError  = !!tokenError;
 
-  // ── Main app ────────────────────────────────────────────────────────────────
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor={C.bg} />
 
+      {/* Settings modal */}
+      <SettingsModal
+        visible={showSettings}
+        currentUrl={serverUrl || DEFAULT_URL}
+        onSave={handleSaveUrl}
+        onClose={() => setShowSettings(false)}
+      />
+
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>⚡ AC Remote</Text>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <View style={[styles.dot, { backgroundColor: connected ? C.green : C.muted }]} />
-          <Text style={styles.textDim}>{connected ? "Live" : "Offline"}</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <View style={[styles.dot, { backgroundColor: connected ? C.green : C.muted }]} />
+            <Text style={styles.textDim}>{connected ? "Live" : "Offline"}</Text>
+          </View>
+          <TouchableOpacity onPress={() => setShowSettings(true)} style={styles.settingsBtn}>
+            <Text style={{ color: C.muted, fontSize: 18 }}>⚙</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Stats */}
-      <View style={styles.statsRow}>
-        {[
-          { label: "Online",   val: devices.filter(d => d.status !== "offline").length, color: C.green   },
-          { label: "Sessions", val: devices.filter(d => d.status === "in_session").length, color: C.amber },
-          { label: "Today",    val: stats.sessions, color: "#818CF8" },
-          { label: "Minutes",  val: parseFloat(stats.minutes || 0).toFixed(0), color: "#A78BFA" },
-        ].map(s => (
-          <View key={s.label} style={styles.statCard}>
-            <Text style={[styles.statVal, { color: s.color }]}>{s.val}</Text>
-            <Text style={styles.statLabel}>{s.label}</Text>
-          </View>
-        ))}
-      </View>
+      {/* Loading */}
+      {isLoading && (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <ActivityIndicator color={C.red} size="large" />
+          <Text style={[styles.textDim, { marginTop: 12 }]}>Connecting to {serverUrl}…</Text>
+        </View>
+      )}
 
-      {/* Tabs */}
-      <View style={styles.tabs}>
-        {["devices", "logout"].map(t => (
-          <TouchableOpacity key={t} style={[styles.tab, tab === t && styles.tabActive]}
-            onPress={() => t === "logout" ? setToken(null) : setTab(t)}>
-            <Text style={[styles.tabText, tab === t && styles.tabTextActive]}>
-              {t === "logout" ? "Sign Out" : "Devices"}
-            </Text>
+      {/* Error */}
+      {hasError && (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24 }}>
+          <Text style={{ fontSize: 36, marginBottom: 12 }}>⚠️</Text>
+          <Text style={{ color: "#F87171", textAlign: "center", marginBottom: 20 }}>{tokenError}</Text>
+          <TouchableOpacity style={styles.launchBtn} onPress={() => setShowSettings(true)}>
+            <Text style={styles.launchBtnText}>Change Server IP</Text>
           </TouchableOpacity>
-        ))}
-      </View>
+        </View>
+      )}
 
-      {/* Devices list */}
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
-        {devices.length === 0
-          ? <Text style={[styles.textDim, { textAlign: "center", marginTop: 40 }]}>No devices registered.</Text>
-          : devices.map(d => <DeviceCard key={d.id} device={d} token={token} socket={socket} />)
-        }
-      </ScrollView>
+      {/* Main content */}
+      {token && !hasError && (
+        <>
+          {/* Stats */}
+          <View style={styles.statsRow}>
+            {[
+              { label: "Online",   val: devices.filter(d => d.status !== "offline").length, color: C.green   },
+              { label: "Sessions", val: devices.filter(d => d.status === "in_session").length, color: C.amber },
+              { label: "Today",    val: stats.sessions, color: "#818CF8" },
+              { label: "Minutes",  val: stats.minutes,  color: "#A78BFA" },
+            ].map(s => (
+              <View key={s.label} style={styles.statCard}>
+                <Text style={[styles.statVal, { color: s.color }]}>{s.val}</Text>
+                <Text style={styles.statLabel}>{s.label}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Devices list */}
+          <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
+            {devices.length === 0
+              ? <Text style={[styles.textDim, { textAlign: "center", marginTop: 40 }]}>No devices registered.</Text>
+              : devices.map(d => (
+                  <DeviceCard key={d.id} device={d} token={token} socket={socket} serverUrl={serverUrl} />
+                ))
+            }
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 }
 
 // ── Styles ─────────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  root:        { flex: 1, backgroundColor: C.bg },
-  loginScreen: { flex: 1, backgroundColor: C.bg, alignItems: "center", justifyContent: "center", padding: 24 },
-  logoBox:     { width: 64, height: 64, borderRadius: 18, backgroundColor: C.red, alignItems: "center", justifyContent: "center", marginBottom: 12, shadowColor: C.red, shadowOpacity: 0.5, shadowRadius: 20 },
-  logoIcon:    { fontSize: 30 },
-  loginTitle:  { color: C.text, fontSize: 22, fontWeight: "700", marginBottom: 4 },
-  loginSub:    { color: C.muted, fontSize: 13, marginBottom: 28 },
-  loginCard:   { width: "100%", backgroundColor: C.surface, borderRadius: 20, padding: 20, borderWidth: 1, borderColor: C.border },
-  error:       { color: "#F87171", fontSize: 12, marginBottom: 10 },
+  root:         { flex: 1, backgroundColor: C.bg },
 
-  header:      { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 16, paddingTop: 52, paddingBottom: 12, backgroundColor: C.surface, borderBottomWidth: 1, borderBottomColor: C.border },
-  headerTitle: { color: C.text, fontSize: 17, fontWeight: "700" },
+  header:       { flexDirection: "row", justifyContent: "space-between", alignItems: "center",
+                  paddingHorizontal: 16, paddingTop: 52, paddingBottom: 12,
+                  backgroundColor: C.surface, borderBottomWidth: 1, borderBottomColor: C.border },
+  headerTitle:  { color: C.text, fontSize: 17, fontWeight: "700" },
+  settingsBtn:  { padding: 4 },
 
-  statsRow:   { flexDirection: "row", padding: 12, gap: 8 },
-  statCard:   { flex: 1, backgroundColor: C.surface, borderRadius: 14, borderWidth: 1, borderColor: C.border, alignItems: "center", paddingVertical: 10 },
-  statVal:    { fontSize: 22, fontWeight: "800" },
-  statLabel:  { color: C.muted, fontSize: 10, marginTop: 2 },
+  statsRow:     { flexDirection: "row", padding: 12, gap: 8 },
+  statCard:     { flex: 1, backgroundColor: C.surface, borderRadius: 14, borderWidth: 1,
+                  borderColor: C.border, alignItems: "center", paddingVertical: 10 },
+  statVal:      { fontSize: 22, fontWeight: "800" },
+  statLabel:    { color: C.muted, fontSize: 10, marginTop: 2 },
 
-  tabs:        { flexDirection: "row", marginHorizontal: 16, marginBottom: 4, backgroundColor: C.surface, borderRadius: 12, borderWidth: 1, borderColor: C.border, padding: 3 },
-  tab:         { flex: 1, paddingVertical: 7, borderRadius: 10, alignItems: "center" },
-  tabActive:   { backgroundColor: C.red },
-  tabText:     { color: C.muted, fontSize: 13, fontWeight: "600" },
-  tabTextActive:{ color: C.text },
+  card:         { backgroundColor: C.surface, borderRadius: 18, borderWidth: 1, borderColor: C.border, overflow: "hidden" },
+  cardHeader:   { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 16 },
+  cardTitle:    { color: C.text, fontWeight: "700", fontSize: 15 },
+  cardSub:      { color: C.muted, fontSize: 12, marginTop: 2 },
 
-  card:        { backgroundColor: C.surface, borderRadius: 18, borderWidth: 1, borderColor: C.border, overflow: "hidden" },
-  cardHeader:  { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 16 },
-  cardTitle:   { color: C.text, fontWeight: "700", fontSize: 15 },
-  cardSub:     { color: C.muted, fontSize: 12, marginTop: 2 },
+  badge:        { flexDirection: "row", alignItems: "center", gap: 5, borderRadius: 20,
+                  borderWidth: 1, paddingHorizontal: 8, paddingVertical: 4 },
+  dot:          { width: 6, height: 6, borderRadius: 3 },
+  badgeText:    { fontSize: 11, fontWeight: "600" },
 
-  badge:       { flexDirection: "row", alignItems: "center", gap: 5, borderRadius: 20, borderWidth: 1, paddingHorizontal: 8, paddingVertical: 4 },
-  dot:         { width: 6, height: 6, borderRadius: 3 },
-  badgeText:   { fontSize: 11, fontWeight: "600" },
+  timerBox:     { flexDirection: "row", justifyContent: "space-between", alignItems: "center",
+                  backgroundColor: "#F59E0B10", borderTopWidth: 1, borderTopColor: "#F59E0B30",
+                  paddingHorizontal: 16, paddingVertical: 14 },
+  timerLabel:   { color: C.amber, fontSize: 10, fontWeight: "600", letterSpacing: 1, marginBottom: 4 },
+  timerText:    { color: C.text, fontSize: 36, fontWeight: "800", fontVariant: ["tabular-nums"] },
+  stopBtn:      { backgroundColor: "#7F1D1D30", borderWidth: 1, borderColor: "#DC262640",
+                  borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 },
+  stopBtnText:  { color: "#FCA5A5", fontSize: 12, fontWeight: "600" },
 
-  timerBox:    { flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "#F59E0B10", borderTopWidth: 1, borderTopColor: "#F59E0B30", paddingHorizontal: 16, paddingVertical: 14 },
-  timerLabel:  { color: C.amber, fontSize: 10, fontWeight: "600", letterSpacing: 1, marginBottom: 4 },
-  timerText:   { color: C.text, fontSize: 36, fontWeight: "800", fontVariant: ["tabular-nums"] },
-  stopBtn:     { backgroundColor: "#7F1D1D30", borderWidth: 1, borderColor: "#DC262640", borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 },
-  stopBtnText: { color: "#FCA5A5", fontSize: 12, fontWeight: "600" },
-
-  launchBtn:   { backgroundColor: C.red, marginHorizontal: 16, marginBottom: 14, borderRadius: 12, paddingVertical: 12, alignItems: "center" },
+  launchBtn:    { backgroundColor: C.red, marginHorizontal: 16, marginBottom: 14,
+                  borderRadius: 12, paddingVertical: 12, alignItems: "center" },
   launchBtnText:{ color: "#fff", fontWeight: "700", fontSize: 14 },
 
-  form:        { paddingHorizontal: 16, paddingBottom: 4 },
-  formRow:     { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
-  formLabel:   { color: C.textDim, fontSize: 12, fontWeight: "500", marginBottom: 4 },
-  input:       { flex: 1, backgroundColor: "#1A1A24", borderWidth: 1, borderColor: C.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: C.text, fontSize: 13, marginLeft: 12 },
+  form:         { paddingHorizontal: 16, paddingBottom: 4 },
+  formRow:      { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
+  formLabel:    { color: C.textDim, fontSize: 12, fontWeight: "500", marginBottom: 4 },
+  input:        { flex: 1, backgroundColor: "#1A1A24", borderWidth: 1, borderColor: C.border,
+                  borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8,
+                  color: C.text, fontSize: 13, marginLeft: 12 },
 
-  launching:   { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingBottom: 14 },
-  textDim:     { color: C.muted, fontSize: 13 },
+  launching:    { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingBottom: 14 },
+  textDim:      { color: C.muted, fontSize: 13 },
+
+  // Settings modal
+  modalOverlay: { flex: 1, backgroundColor: "#000000AA", justifyContent: "flex-end" },
+  modalCard:    { backgroundColor: C.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+                  padding: 24, paddingBottom: 40, borderTopWidth: 1, borderTopColor: C.border },
+  modalTitle:   { color: C.text, fontSize: 18, fontWeight: "700", marginBottom: 6 },
+  modalSub:     { color: C.muted, fontSize: 13, lineHeight: 18 },
 });

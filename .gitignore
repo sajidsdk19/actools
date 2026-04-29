@@ -56,6 +56,9 @@ TestResults/*
 /remote-manager/client-agent/node_modules
 /remote-manager/server/node_modules
 /pc-agent-deploy/
+/remote-manager/client-agent/node_modules
+/remote-manager/electron-app/
+
 
 # For debugging, VS builds faster in just one output folder
 Output/*

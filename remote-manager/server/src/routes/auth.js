@@ -2,8 +2,17 @@ const express  = require('express');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
 const { pool } = require('../db/pool');
+const { getBypassToken } = require('../middleware/auth');
 
 const router = express.Router();
+
+// GET /auth/bypass-token  — returns a long-lived token when BYPASS_AUTH=true
+// Used by the Electron/desktop dashboard to auto-authenticate without a login screen.
+router.get('/bypass-token', (req, res) => {
+  const token = getBypassToken();
+  if (!token) return res.status(403).json({ error: 'Bypass auth is not enabled on this server.' });
+  res.json({ token, user: { id: 'admin', email: 'Admin', role: 'admin' } });
+});
 
 // POST /auth/register  (first-time setup; disable in production after use)
 router.post('/register', async (req, res, next) => {

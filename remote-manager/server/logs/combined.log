@@ -42,3 +42,230 @@ SQL: INSERT INTO sessions
 [2026-04-27T23:02:37.301Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session e9d8ddcc7b9b8e3d5f15bd513cc03be8
 [2026-04-27T23:02:38.056Z] INFO: [Socket] SESSION_ENDED: e9d8ddcc7b9b8e3d5f15bd513cc03be8 — 0.0 min
 [2026-04-27T23:04:38.271Z] INFO: [Socket] SESSION_ENDED: e9d8ddcc7b9b8e3d5f15bd513cc03be8 — 2.0 min
+[2026-04-29T11:38:40.427Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T11:38:40.438Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T11:38:40.443Z] INFO: Server listening on :4000
+[2026-04-29T11:38:41.471Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T11:42:36.317Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T11:42:36.323Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T11:42:36.329Z] INFO: Server listening on :4000
+[2026-04-29T11:42:40.197Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T11:43:53.083Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T11:43:53.087Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T11:43:53.094Z] INFO: Server listening on :4000
+[2026-04-29T11:43:53.977Z] INFO: [Reporting] Daily report for 2026-04-29: 0 sessions, 0 min
+[2026-04-29T11:43:54.035Z] INFO: [Socket] Dashboard connected: 0_WWOZyiRvoieoprAAAB
+[2026-04-29T11:43:54.309Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T11:44:21.791Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 252abd6562f3234b120d975fcd700c31
+[2026-04-29T11:45:20.399Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-04-29T11:45:20.449Z] INFO: [Socket] SESSION_ENDED: 252abd6562f3234b120d975fcd700c31 — 1.0 min
+[2026-04-29T11:46:04.912Z] INFO: [Socket] Dashboard connected: HYXojNproi-5l5H2AAAF
+[2026-04-29T11:46:15.024Z] INFO: [Socket] Dashboard connected: EnzAbu334vM4Rc1kAAAH
+[2026-04-29T11:47:10.360Z] INFO: [Socket] Dashboard connected: vaUf6am1IZqt8p1KAAAJ
+[2026-04-29T11:47:37.848Z] INFO: [Socket] Dashboard connected: 6w3sdXTvQnSQMSB1AAAL
+[2026-04-29T11:53:20.500Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T11:53:20.505Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T11:53:20.510Z] INFO: Server listening on :4000
+[2026-04-29T11:53:20.567Z] INFO: [Socket] Dashboard connected: yGHi3ia7uuOntycxAAAB
+[2026-04-29T11:53:22.027Z] INFO: [Socket] Dashboard connected: wzg-xJg_HGyAr3NhAAAD
+[2026-04-29T11:53:25.611Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T12:00:08.745Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T12:00:08.750Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T12:00:08.756Z] INFO: Server listening on :4000
+[2026-04-29T12:00:10.043Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T12:00:10.253Z] INFO: [Socket] Dashboard connected: ep8GfAXtUxfe6kn0AAAD
+[2026-04-29T12:00:10.803Z] INFO: [Socket] Dashboard connected: AKxbdufof_tDZktYAAAF
+[2026-04-29T12:01:35.545Z] WARN: [Auth] Bad agent secret from
+[2026-04-29T12:05:47.674Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T12:05:47.680Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T12:05:47.687Z] INFO: Server listening on :4000
+[2026-04-29T12:05:50.254Z] INFO: [Socket] Dashboard connected (bypass): C6m0agnOayl-hPspAAAB
+[2026-04-29T12:05:50.536Z] INFO: [Socket] Dashboard connected (bypass): BcI_3c35dj1OSzEyAAAD
+[2026-04-29T12:05:52.794Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T12:08:08.667Z] WARN: [Auth] Bad agent secret from
+[2026-04-29T12:14:31.298Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session c965917ecfe696105f89d9a91927bb4a
+[2026-04-29T12:14:37.430Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-04-29T12:14:38.462Z] INFO: [Socket] SESSION_ENDED: c965917ecfe696105f89d9a91927bb4a — 0.1 min
+[2026-04-29T12:14:38.464Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-04-29T12:18:26.516Z] INFO: [Devices] Registered: Gaming-PC-2
+[2026-04-29T12:18:26.586Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:18:52.169Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 184b25d89a9dc1d3f7a2a2917cb99610
+[2026-04-29T12:18:52.181Z] ERROR: [Socket] SESSION_ERROR on 184b25d89a9dc1d3f7a2a2917cb99610: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:20:00.544Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:20:37.866Z] INFO: [Socket] Dashboard connected (bypass): vDTiPC_GLAc9u2avAAAL
+[2026-04-29T12:20:46.911Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 91f64f84286fe40bf21082e8f28fdaa4
+[2026-04-29T12:20:46.937Z] ERROR: [Socket] SESSION_ERROR on 91f64f84286fe40bf21082e8f28fdaa4: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:20:46.954Z] ERROR: [Socket] SESSION_ERROR on 91f64f84286fe40bf21082e8f28fdaa4: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:21:38.555Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 60df3129a7b8de0a75b45f5ec93a0d2f
+[2026-04-29T12:21:38.598Z] ERROR: [Socket] SESSION_ERROR on 60df3129a7b8de0a75b45f5ec93a0d2f: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:21:38.616Z] ERROR: [Socket] SESSION_ERROR on 60df3129a7b8de0a75b45f5ec93a0d2f: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:21:56.031Z] INFO: [Socket] Dashboard connected (bypass): wHsVajn6RXVSycAeAAAN
+[2026-04-29T12:22:04.370Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 3a7dcc0794596ef24cf68eb0319b3d1c
+[2026-04-29T12:22:04.380Z] ERROR: [Socket] SESSION_ERROR on 3a7dcc0794596ef24cf68eb0319b3d1c: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:22:04.397Z] ERROR: [Socket] SESSION_ERROR on 3a7dcc0794596ef24cf68eb0319b3d1c: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:23:07.704Z] INFO: [Socket] Dashboard connected (bypass): 7nhi1Y_QvpDS_-VkAAAP
+[2026-04-29T12:23:16.029Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 509d0d054c30240efc02a3123f80faf4
+[2026-04-29T12:23:16.042Z] ERROR: [Socket] SESSION_ERROR on 509d0d054c30240efc02a3123f80faf4: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:23:16.063Z] ERROR: [Socket] SESSION_ERROR on 509d0d054c30240efc02a3123f80faf4: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:24:38.392Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:25:00.578Z] INFO: [Socket] Dashboard connected (bypass): bLj0huNRkmMhQsIyAAAT
+[2026-04-29T12:25:11.138Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session b08e01118ccffb2e733e780a126a1802
+[2026-04-29T12:25:11.149Z] ERROR: [Socket] SESSION_ERROR on b08e01118ccffb2e733e780a126a1802: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:25:11.167Z] ERROR: [Socket] SESSION_ERROR on b08e01118ccffb2e733e780a126a1802: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:25:45.499Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 471dc327516b7d5455ba00bd36d071b5
+[2026-04-29T12:25:45.529Z] ERROR: [Socket] SESSION_ERROR on 471dc327516b7d5455ba00bd36d071b5: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:25:45.545Z] ERROR: [Socket] SESSION_ERROR on 471dc327516b7d5455ba00bd36d071b5: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:25:53.475Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:25:59.906Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:26:09.022Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:26:11.558Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:26:17.489Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 2d76be86f4e5d0b2b6467ffe891900e6
+[2026-04-29T12:26:17.503Z] ERROR: [Socket] SESSION_ERROR on 2d76be86f4e5d0b2b6467ffe891900e6: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
+[2026-04-29T12:26:17.520Z] ERROR: [Socket] SESSION_ERROR on 2d76be86f4e5d0b2b6467ffe891900e6: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-04-29T12:28:12.902Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:30:28.826Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:30:40.536Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:30:54.166Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:30:54.175Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:30:54.183Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:30:54.192Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:30:59.934Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:31:14.360Z] INFO: [Socket] Dashboard connected (bypass): KDElr9JgllZcH_18AAAf
+[2026-04-29T12:31:26.397Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 51eae43baa9d05bd3f20e24f8a9d68a9
+[2026-04-29T12:32:02.506Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T12:32:03.533Z] INFO: [Socket] SESSION_ENDED: 51eae43baa9d05bd3f20e24f8a9d68a9 — 0.6 min
+[2026-04-29T12:32:08.484Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T12:33:33.106Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T12:33:42.134Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 54506b0b7a57a4f6faa67988ba61c6e4
+[2026-04-29T12:34:17.523Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T12:34:17.990Z] INFO: [Socket] SESSION_ENDED: 54506b0b7a57a4f6faa67988ba61c6e4 — 0.6 min
+[2026-04-29T12:34:30.345Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 26a3fcf448209b01cf9b0653c8435be1
+[2026-04-29T12:34:54.135Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T12:34:54.280Z] INFO: [Socket] SESSION_ENDED: 26a3fcf448209b01cf9b0653c8435be1 — 0.4 min
+[2026-04-29T12:34:57.646Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 4c880c29aad27a374451597e58536a59
+[2026-04-29T12:35:49.142Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T12:35:50.174Z] INFO: [Socket] SESSION_ENDED: 4c880c29aad27a374451597e58536a59 — 0.9 min
+[2026-04-29T12:35:54.767Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 597ebd33ff8399fd3c5fb66f1bbb7e06
+[2026-04-29T12:36:03.440Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-04-29T12:36:04.116Z] INFO: [Socket] SESSION_ENDED: 597ebd33ff8399fd3c5fb66f1bbb7e06 — 0.1 min
+[2026-04-29T12:36:31.937Z] INFO: [Socket] Dashboard connected (bypass): -YM6qAeDPICCu5zXAAAj
+[2026-04-29T12:36:37.087Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T19:57:19.528Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T19:57:19.544Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T19:57:19.552Z] INFO: Server listening on :4000
+[2026-04-29T19:57:21.000Z] INFO: [Socket] Dashboard connected (bypass): gHNxFLKShbHYxs0VAAAB
+[2026-04-29T19:57:22.902Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T19:57:36.065Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 99d02e1a77743151f32350c550dca158
+[2026-04-29T19:59:43.785Z] INFO: [Socket] SESSION_ENDED: 99d02e1a77743151f32350c550dca158 — 2.1 min
+[2026-04-29T20:03:25.852Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T20:03:25.858Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T20:03:25.870Z] INFO: Server listening on :4000
+[2026-04-29T20:03:27.048Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T20:03:27.472Z] INFO: [Socket] Dashboard connected (bypass): oH_MI5JLDbDHkEs5AAAD
+[2026-04-29T20:12:47.792Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T20:12:47.796Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T20:12:47.801Z] INFO: Server listening on :4000
+[2026-04-29T20:12:49.358Z] INFO: [Socket] Dashboard connected (bypass): OyOZMeuSbGZSRzCDAAAB
+[2026-04-29T20:12:52.661Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T20:33:00.222Z] INFO: [Socket] Dashboard connected (bypass): 30kXWmHc07hct5B2AAAF
+[2026-04-29T20:46:38.094Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T20:46:38.098Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T20:46:38.101Z] INFO: Server listening on :4000
+[2026-04-29T20:46:39.205Z] INFO: [Socket] Dashboard connected (bypass): xHopxDiVAomeypXeAAAB
+[2026-04-29T20:46:40.179Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T20:47:11.695Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T20:47:11.700Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T20:47:11.706Z] INFO: Server listening on :4000
+[2026-04-29T20:47:12.699Z] INFO: [Socket] Dashboard connected (bypass): RRgwr_LFkutU0pvNAAAB
+[2026-04-29T20:47:16.691Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T20:47:52.027Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T20:48:09.182Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 7c7ec871a99991997edbda46c1fa6b0b
+[2026-04-29T20:49:00.563Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T20:49:00.655Z] INFO: [Socket] SESSION_ENDED: 7c7ec871a99991997edbda46c1fa6b0b — 0.9 min
+[2026-04-29T20:49:03.800Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session b4d2b3a499fbb81dee40c4284c4e9a4c
+[2026-04-29T20:49:26.311Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T20:49:26.564Z] INFO: [Socket] SESSION_ENDED: b4d2b3a499fbb81dee40c4284c4e9a4c — 0.4 min
+[2026-04-29T20:49:28.509Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session cd3cbbd89d988015fb94d703a6f87e41
+[2026-04-29T20:50:08.525Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T20:50:08.870Z] INFO: [Socket] SESSION_ENDED: cd3cbbd89d988015fb94d703a6f87e41 — 0.7 min
+[2026-04-29T20:50:18.880Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 85b0aa60fbb5a849144edd56c583d2ac
+[2026-04-29T20:50:24.732Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T20:50:25.176Z] INFO: [Socket] SESSION_ENDED: 85b0aa60fbb5a849144edd56c583d2ac — 0.1 min
+[2026-04-29T20:50:28.335Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T20:50:32.105Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 00bd2f5ced82da52d441828697fcab48
+[2026-04-29T20:52:54.291Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T20:52:55.162Z] INFO: [Socket] SESSION_ENDED: 00bd2f5ced82da52d441828697fcab48 — 2.4 min
+[2026-04-29T20:52:55.175Z] INFO: [Socket] SESSION_ENDED: 00bd2f5ced82da52d441828697fcab48 — 2.4 min
+[2026-04-29T21:40:55.399Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T21:40:55.402Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T21:40:55.406Z] INFO: Server listening on :4000
+[2026-04-29T21:40:56.367Z] INFO: [Socket] Dashboard connected (bypass): vJeTmOZWZ97x_U_jAAAB
+[2026-04-29T21:40:58.605Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T21:41:02.549Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 689e779e95df56f2802842bc677c2750
+[2026-04-29T21:41:02.734Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:42:48.061Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:42:55.362Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:43:31.532Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 13aba947c7dce0b2c43dc82494f87c93
+[2026-04-29T21:43:40.447Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:44:26.573Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:44:41.555Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:45:00.715Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:45:27.931Z] INFO: [Socket] SESSION_ENDED: 13aba947c7dce0b2c43dc82494f87c93 — 1.1 min
+[2026-04-29T21:45:39.930Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session b6897b28feb51315ac48b85ac767702d
+[2026-04-29T21:46:41.813Z] INFO: [Socket] SESSION_ENDED: b6897b28feb51315ac48b85ac767702d — 1.0 min
+[2026-04-29T21:46:44.313Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:46:57.358Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:47:04.865Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T21:47:04.869Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T21:47:04.874Z] INFO: Server listening on :4000
+[2026-04-29T21:47:05.999Z] INFO: [Socket] Dashboard connected (bypass): hAN-NYv-FjYSeEeXAAAB
+[2026-04-29T21:47:06.543Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:47:09.527Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T21:47:14.495Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 29efd23af99baa0f9fee84a5a4c9a522
+[2026-04-29T21:47:56.157Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T21:47:56.324Z] INFO: [Socket] SESSION_ENDED: 29efd23af99baa0f9fee84a5a4c9a522 — 0.7 min
+[2026-04-29T21:48:06.436Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session f00c8dd7ba36fc1b38db8cecb1936692
+[2026-04-29T21:48:33.150Z] INFO: [Socket] SESSION_ENDED: f00c8dd7ba36fc1b38db8cecb1936692 — 0.4 min
+[2026-04-29T21:48:35.525Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:50:10.276Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:50:13.694Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session f7c32e36f3765c6433f56fab416e497f
+[2026-04-29T21:50:25.299Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:50:40.746Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:50:44.139Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:50:46.483Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:51:05.529Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 65a5ff2cc2fab7b3a8befc9d4167b76a
+[2026-04-29T21:51:28.757Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T21:51:29.288Z] INFO: [Socket] SESSION_ENDED: 65a5ff2cc2fab7b3a8befc9d4167b76a — 0.4 min
+[2026-04-29T21:51:32.871Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 4d0b2fe4c21fa02eace8e8d09ff69496
+[2026-04-29T21:51:40.342Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:51:56.878Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:52:10.271Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T21:52:10.278Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T21:52:10.285Z] INFO: Server listening on :4000
+[2026-04-29T21:52:12.101Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T21:52:12.174Z] INFO: [Socket] Dashboard connected (bypass): Fb3T9r3M4pkGptURAAAD
+[2026-04-29T21:52:14.397Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T21:52:23.031Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 7c026e01f34b46662571a6152dfbc558
+[2026-04-29T21:52:42.842Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T21:52:43.478Z] INFO: [Socket] SESSION_ENDED: 7c026e01f34b46662571a6152dfbc558 — 0.3 min
+[2026-04-29T21:53:01.827Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 45ef151bc1272266f078e9760a12eea1
+[2026-04-29T21:53:20.939Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T21:53:21.410Z] INFO: [Socket] SESSION_ENDED: 45ef151bc1272266f078e9760a12eea1 — 0.3 min
+[2026-04-29T21:53:30.699Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session b8a56ba708c22b916d21e55259da0e81
+[2026-04-29T21:53:48.914Z] INFO: [Socket] SESSION_ENDED: b8a56ba708c22b916d21e55259da0e81 — 0.3 min
+[2026-04-29T21:53:51.170Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T21:55:48.870Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T22:04:13.476Z] INFO: [Socket] Agent disconnected: Gaming-PC-2
+[2026-04-29T22:04:36.651Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T22:04:51.416Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-04-29T22:04:51.421Z] INFO: [DB] SQLite migrations complete
+[2026-04-29T22:04:51.428Z] INFO: Server listening on :4000
+[2026-04-29T22:04:52.865Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-04-29T22:04:52.950Z] INFO: [Socket] Dashboard connected (bypass): WwKNbbH4Xux_dIHFAAAD
+[2026-04-29T22:04:55.132Z] INFO: [Socket] Agent connected: Gaming-PC-2 (9cd9ff199262d2bd11f01863da04170b)
+[2026-04-29T22:05:00.939Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session b9d30ccb5c37ee6675d18ff5f9422f0d
+[2026-04-29T22:06:50.889Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session c7cedfcbee3f244a7bbdad507820295f
+[2026-04-29T22:08:56.234Z] INFO: [Socket] SESSION_ENDED: c7cedfcbee3f244a7bbdad507820295f — 2.1 min
+[2026-04-29T22:11:12.268Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-04-29T22:11:13.258Z] INFO: [Socket] SESSION_ENDED: b9d30ccb5c37ee6675d18ff5f9422f0d — 6.2 min
+[2026-04-29T22:11:38.827Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 37f20b013bc9c2454172fcd2d1180977

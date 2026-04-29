@@ -10,8 +10,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#0A0A0F"
     },
-    "ios":     { "supportsTablet": true },
-    "android": { "adaptiveIcon": { "backgroundColor": "#0A0A0F" }, "edgeToEdgeEnabled": true },
-    "web":     { "bundler": "metro" }
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.acremote.manager"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A0F"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.acremote.manager"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": []
   }
 }
