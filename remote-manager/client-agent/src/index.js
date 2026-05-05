@@ -16,21 +16,23 @@ let deviceToken = null;
 
 // ── Step 1: Register with server ─────────────────────────────────────────────
 async function register() {
-  // Try to reuse saved token
   const saved = loadToken();
-  if (saved) {
-    logger.info(`[Agent] Using stored device token`);
-    return saved;
-  }
 
+  // Always call register so the server gets the current MACHINE_NAME from .env.
+  // If the name changed since last run, the server will update the record in-place.
   logger.info(`[Agent] Registering as "${MACHINE_NAME}"…`);
   const { data } = await axios.post(
     `${SERVER_URL}/devices/register`,
-    { machineName: MACHINE_NAME, displayName: MACHINE_NAME, acRoot: AC_ROOT },
+    {
+      machineName:   MACHINE_NAME,
+      displayName:   MACHINE_NAME,
+      acRoot:        AC_ROOT,
+      existingToken: saved || undefined,   // server uses this to find & update the record
+    },
     { headers: { 'x-agent-secret': AGENT_SECRET } }
   );
   saveToken(data.token);
-  logger.info(`[Agent] Registered — device ID: ${data.id}`);
+  logger.info(`[Agent] Registered — device ID: ${data.id}, name: "${data.display_name}"`);
   return data.token;
 }
 
