@@ -52,29 +52,63 @@ async function launchSession(payload, socket) {
     windowsHide: false,
   });
 
-  let gameStarted  = false;
-  let spawnFailed  = false;
+  let gameStarted     = false;
+  let spawnFailed      = false;
+  let gameClockTimer   = null;  // fallback if SPACE key is never sent
 
   // ── Handle spawn failure (e.g. EXE not found) ──────────────────────────────
   agentProc.on('error', (err) => {
     spawnFailed = true;
+    if (gameClockTimer) { clearTimeout(gameClockTimer); gameClockTimer = null; }
     logger.error(`[GameProcess] Failed to spawn AcAgent.exe: ${err.message}`);
     stopTimerUpdates();
     socket.emit('SESSION_ERROR', { sessionId, error: `Spawn failed: ${err.message}` });
     agentProc = null;
   });
 
-  // Parse stdout to detect when game actually started
+  // Helper: start dashboard timer once game is actually playable
+  function markGameStarted() {
+    if (gameStarted) return;
+    gameStarted = true;
+    if (gameClockTimer) { clearTimeout(gameClockTimer); gameClockTimer = null; }
+    const safeDuration = Math.max(1, durationMinutes || 30);
+    socket.emit('SESSION_STARTED', { sessionId });
+    startTimerUpdates(socket, sessionId, safeDuration);
+  }
 
+  // ── Parse stdout ─────────────────────────────────────────────────────────────
   agentProc.stdout.on('data', (data) => {
-    const line = data.toString().trim();
-    logger.debug(`[AcAgent] ${line}`);
+    const text = data.toString();
+    // Log every line individually at INFO level so TrickyStarter errors are always visible
+    for (const line of text.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
 
-    // AcAgent logs this when acs.exe is confirmed running
-    if (!gameStarted && line.includes('Game clock started')) {
-      gameStarted = true;
-      socket.emit('SESSION_STARTED', { sessionId });
-      startTimerUpdates(socket, sessionId, durationMinutes);
+      // Promote error/warning lines so they stand out
+      if (trimmed.includes('FAILED') || trimmed.includes('CRITICAL') || trimmed.includes('Error')) {
+        logger.error(`[AcAgent] ${trimmed}`);
+      } else {
+        logger.info(`[AcAgent] ${trimmed}`);
+      }
+    }
+
+    const line = text.trim();
+
+    // When acs.exe is confirmed running, arm a 3-min fallback
+    // (in case AutoStart is disabled / SPACE is never sent)
+    if (line.includes('Game clock started') && !gameClockTimer && !gameStarted) {
+      logger.info('[GameProcess] Game clock detected — will start dashboard timer on SPACE or in 3 min.');
+      gameClockTimer = setTimeout(() => {
+        logger.warn('[GameProcess] SPACE key not detected after 3 min — starting timer as fallback.');
+        markGameStarted();
+      }, 3 * 60 * 1000);
+    }
+
+    // Primary trigger: start timer once the engine SPACE key has been sent
+    // i.e. game is fully loaded and car is in the pit lane ready to drive
+    if (!gameStarted && line.includes('SPACE sent')) {
+      logger.info('[GameProcess] SPACE key detected — starting dashboard timer now.');
+      markGameStarted();
     }
 
     // Session complete summary line
@@ -118,11 +152,22 @@ async function launchSession(payload, socket) {
 
 function startTimerUpdates(socket, sessionId, durationMinutes) {
   const endMs = Date.now() + durationMinutes * 60 * 1000;
+  let killFired = false;
 
   timerInterval = setInterval(() => {
     const remaining = Math.max(0, Math.round((endMs - Date.now()) / 1000));
     socket.emit('TIMER_UPDATE', { sessionId, remainingSeconds: remaining });
-    if (remaining <= 0) stopTimerUpdates();
+
+    if (remaining <= 0 && !killFired) {
+      killFired = true;
+      stopTimerUpdates();
+
+      // Belt-and-braces: AcAgentCli.exe has its own internal timer that should
+      // kill the game, but we also force-kill here to guarantee the session ends.
+      // Killing agentProc causes its 'close' handler to fire → SESSION_ENDED emitted.
+      logger.info('[GameProcess] Timer expired — forcing game kill from client agent.');
+      forceKillGame();
+    }
   }, 1000);
 }
 

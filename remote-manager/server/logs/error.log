@@ -21,3 +21,4 @@ SQL: INSERT INTO sessions
 [2026-04-29T12:25:45.545Z] ERROR: [Socket] SESSION_ERROR on 471dc327516b7d5455ba00bd36d071b5: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
 [2026-04-29T12:26:17.503Z] ERROR: [Socket] SESSION_ERROR on 2d76be86f4e5d0b2b6467ffe891900e6: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgent.exe". Check AC_AGENT_EXE in .env
 [2026-04-29T12:26:17.520Z] ERROR: [Socket] SESSION_ERROR on 2d76be86f4e5d0b2b6467ffe891900e6: AC_ROOT directory not found: "C:\Program Files (x86)\Steam\steamapps\common\assettocorsa". Check AC_ROOT in .env
+[2026-05-04T20:51:37.409Z] ERROR: [Socket] SESSION_ERROR on 780d85e9a17ba139b1e3b01c1eb79b7b: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgentCli.exe". Check AC_AGENT_EXE in .env

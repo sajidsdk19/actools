@@ -8,7 +8,10 @@ const router = express.Router();
 // GET /reports/daily?date=YYYY-MM-DD  (default: today)
 router.get('/daily', requireAuth, async (req, res, next) => {
   try {
-    const date = req.query.date || new Date().toISOString().slice(0, 10);
+    const date = req.query.date || (() => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    })();
     const { rows } = await pool.query(
       `SELECT * FROM daily_reports WHERE report_date = $1`, [date]
     );
@@ -24,15 +27,18 @@ router.get('/daily', requireAuth, async (req, res, next) => {
 router.get('/summary', requireAuth, async (req, res, next) => {
   try {
     const from = req.query.from || '1970-01-01';
-    const to   = req.query.to   || new Date().toISOString().slice(0, 10);
+    const to   = req.query.to   || (() => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    })();
     const { rows } = await pool.query(
       `SELECT d.display_name, d.machine_name,
               COUNT(s.id)                               AS session_count,
               ROUND(COALESCE(SUM(s.actual_duration_min),0), 2) AS total_minutes
        FROM sessions s
        JOIN devices d ON d.id = s.device_id
-       WHERE date(COALESCE(s.start_time, s.created_at)) >= $1
-         AND date(COALESCE(s.start_time, s.created_at)) <= $2
+       WHERE date(COALESCE(s.start_time, s.created_at), 'localtime') >= $1
+         AND date(COALESCE(s.start_time, s.created_at), 'localtime') <= $2
          AND s.status = 'completed'
        GROUP BY d.id, d.display_name, d.machine_name
        ORDER BY total_minutes DESC`,

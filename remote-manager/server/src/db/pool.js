@@ -129,6 +129,52 @@ async function connectDb() {
   db = new DatabaseSync(DB_FILE);
   logger.info('[DB] SQLite connected: ' + DB_FILE);
   migrate();
+  startupCleanup();
+}
+
+/**
+ * On every server start, reset any stale state left over from a previous crash
+ * or ungraceful shutdown:
+ *   • Devices stuck as 'in_session' → reset to 'offline'
+ *   • Sessions with status 'pending' or 'running' that have no end_time → mark 'error'
+ */
+function startupCleanup() {
+  try {
+    // 1. Find devices that are stuck in_session
+    const stuckDevices = db.prepare(
+      `SELECT id, display_name, machine_name FROM devices WHERE status = 'in_session'`
+    ).all();
+
+    if (stuckDevices.length > 0) {
+      logger.warn(`[DB] Startup cleanup: resetting ${stuckDevices.length} stuck device(s) to offline`);
+      stuckDevices.forEach(d => {
+        logger.warn(`[DB]   → "${d.display_name || d.machine_name}" was in_session — reset to offline`);
+      });
+      db.prepare(
+        `UPDATE devices SET status = 'offline' WHERE status = 'in_session'`
+      ).run();
+    }
+
+    // 2. Mark orphaned sessions (pending/running with no end_time) as error
+    const orphaned = db.prepare(
+      `SELECT COUNT(*) as cnt FROM sessions WHERE status IN ('pending','running') AND end_time IS NULL`
+    ).get();
+
+    if (orphaned.cnt > 0) {
+      logger.warn(`[DB] Startup cleanup: marking ${orphaned.cnt} orphaned session(s) as 'error'`);
+      db.prepare(
+        `UPDATE sessions
+         SET status = 'error', end_time = datetime('now')
+         WHERE status IN ('pending','running') AND end_time IS NULL`
+      ).run();
+    }
+
+    if (stuckDevices.length === 0 && orphaned.cnt === 0) {
+      logger.info('[DB] Startup cleanup: no stale state found');
+    }
+  } catch (e) {
+    logger.error('[DB] Startup cleanup failed: ' + e.message);
+  }
 }
 
 const pool = { query };

@@ -40,6 +40,7 @@ export default function DeviceCard({ device, token, onSessionChange }) {
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
 
+
   // Real-time socket events
   useEffect(() => {
     if (!socket) return;
@@ -106,6 +107,7 @@ export default function DeviceCard({ device, token, onSessionChange }) {
     }
   }, [device.id, token, car, track, mode, duration, easy]);
 
+  // Must be declared BEFORE any useEffect that lists it as a dependency
   const forceStop = useCallback(async () => {
     await fetch(`${SERVER_URL}/sessions/force-stop`, {
       method: "POST",
@@ -113,6 +115,16 @@ export default function DeviceCard({ device, token, onSessionChange }) {
       body: JSON.stringify({ deviceId: device.id }),
     });
   }, [device.id, token]);
+
+  // Auto force-stop when timer hits 0 (backstop in case agent-side kill fails)
+  useEffect(() => {
+    if (remaining !== 0 || status !== "in_session") return;
+    // Give AcAgentCli's own timer + the agent's JS kill 3 s to handle it first
+    const grace = setTimeout(() => {
+      forceStop();
+    }, 3000);
+    return () => clearTimeout(grace);
+  }, [remaining, status, forceStop]);
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden transition-all hover:border-gray-700">
@@ -141,7 +153,11 @@ export default function DeviceCard({ device, token, onSessionChange }) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-amber-400 text-xs font-medium uppercase tracking-wide mb-1">Time Remaining</p>
-              <p className="text-3xl font-mono font-bold text-white">{fmt(remaining)}</p>
+              {remaining === 0 ? (
+                <p className="text-3xl font-mono font-bold text-red-400 animate-pulse">Stopping…</p>
+              ) : (
+                <p className="text-3xl font-mono font-bold text-white">{fmt(remaining)}</p>
+              )}
             </div>
             <button
               onClick={forceStop}

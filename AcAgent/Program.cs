@@ -182,6 +182,9 @@ static ServiceProvider BuildServices(string acRoot)
     // Session management
     sc.AddSingleton<SessionManager>();
 
+    // Start-engine UI automator (fires SPACE after acs.exe loads to skip "Start Engine" screen)
+    sc.AddSingleton<StartEngineAutomator>();
+
     // Game launcher
     sc.AddSingleton<GameLauncherService>();
 

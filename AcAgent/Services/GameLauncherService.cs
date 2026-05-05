@@ -1,5 +1,6 @@
 using AcAgent.Infrastructure;
 using AcAgent.Models;
+using AcTools.Processes;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -10,11 +11,20 @@ namespace AcAgent.Services;
 ///
 /// Flow:
 ///   1. Writes race.ini + assists.ini via AcToolsIntegration.
-///   2. Spawns AssettoCorsa.exe (the Steam launcher stub).
-///   3. Polls process list until acs.exe / acs_x86.exe appears (the real engine).
+///   2. Launches acs.exe via TrickyStarter (bypasses main menu / splash screens).
+///   3. Polls until acs.exe window appears; fires StartEngineAutomator to
+///      automatically press SPACE ("Start Engine") after the loading screen clears.
 ///   4. Fires OnGameStarted callback and arms the session timer.
 ///   5. Waits for acs.exe to exit OR timer/external cancel.
-///   6. If timer fires first, acs.exe is killed.
+///   6. If timer fires first, acs.exe is killed; TrickyStarter.CleanUp restores
+///      AssettoCorsa.exe to its original state.
+///
+/// Why TrickyStarter?
+///   The stock AssettoCorsa.exe launcher shows the main menu, requiring the
+///   player to click Drive → Quick Race → Start Engine manually.
+///   TrickyStarter temporarily replaces AssettoCorsa.exe with a lightweight stub
+///   that calls acs.exe directly, bypassing every menu and splash screen.
+///   The game lands straight in the pit-lane "Start Engine" screen.
 /// </summary>
 public sealed class GameLauncherService
 {
@@ -25,8 +35,9 @@ public sealed class GameLauncherService
     // Everything to kill when ending a session
     private static readonly string[] AcsKillNames = new[] { "acs", "acs_x86", "AssettoCorsa" };
 
-    private readonly AcToolsIntegration _acTools;
-    private readonly SessionManager     _sessionManager;
+    private readonly AcToolsIntegration       _acTools;
+    private readonly SessionManager           _sessionManager;
+    private readonly StartEngineAutomator     _startEngine;
     private readonly ILogger<GameLauncherService> _logger;
 
     /// <summary>
@@ -38,10 +49,12 @@ public sealed class GameLauncherService
     public GameLauncherService(
         AcToolsIntegration acTools,
         SessionManager sessionManager,
+        StartEngineAutomator startEngine,
         ILogger<GameLauncherService> logger)
     {
         _acTools        = acTools;
         _sessionManager = sessionManager;
+        _startEngine    = startEngine;
         _logger         = logger;
     }
 
@@ -62,27 +75,68 @@ public sealed class GameLauncherService
         // ── 2. Begin session record ───────────────────────────────────────────
         var session = _sessionManager.BeginSession(config);
 
-        // ── 3. Spawn AssettoCorsa.exe ─────────────────────────────────────────
-        var acExe = _acTools.GetAcExePath();
-        _logger.LogInformation("[Launch] Spawning {Exe}", acExe);
+        // ── 3. Launch via TrickyStarter (with direct acs.exe fallback) ──────────
+        //    TrickyStarter temporarily replaces AssettoCorsa.exe with a stub
+        //    that calls acs.exe directly, bypassing the main menu and all
+        //    splash screens entirely.
+        //
+        //    If TrickyStarter fails (e.g. Steam file lock, permissions), we fall
+        //    back to launching acs.exe directly — the game will still work but
+        //    Steam may complain. Better than a 0-second session.
+        _logger.LogInformation("[Launch] Creating TrickyStarter to bypass main menu…");
 
-        var psi = new ProcessStartInfo(acExe)
-        {
-            UseShellExecute  = true,   // required for Steam-based launch
-            WorkingDirectory = Path.GetDirectoryName(acExe)!,
-        };
-
-        Process? launcherProc = null;
+        TrickyStarter? starter = null;
         try
         {
-            launcherProc = Process.Start(psi);
+            starter = _acTools.CreateStarter();
+            starter.Run(); // replaces AssettoCorsa.exe stub + spawns it
+            _logger.LogInformation("[Launch] TrickyStarter launched successfully.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "[Launch] Failed to start AssettoCorsa.exe.");
-            session.StartTimeUtc = DateTime.UtcNow;
-            session = _sessionManager.EndSession(session);
-            return session;
+            _logger.LogError(
+                "[Launch] TrickyStarter FAILED — Type={Type}, Message={Msg}. " +
+                "Falling back to direct acs.exe launch…",
+                ex.GetType().Name, ex.Message);
+
+            // ── Fallback: launch acs.exe directly ────────────────────────────
+            var acsExe = Path.Combine(_acTools.AcRoot, "acs.exe");
+            if (!File.Exists(acsExe))
+            {
+                // Try 32-bit variant
+                acsExe = Path.Combine(_acTools.AcRoot, "acs_x86.exe");
+            }
+
+            if (File.Exists(acsExe))
+            {
+                try
+                {
+                    _logger.LogInformation("[Launch] Launching directly: {Exe}", acsExe);
+                    Process.Start(new ProcessStartInfo(acsExe)
+                    {
+                        WorkingDirectory  = _acTools.AcRoot,
+                        UseShellExecute   = true,   // required so the game window appears
+                    });
+                    _logger.LogInformation("[Launch] Direct acs.exe launch spawned.");
+                }
+                catch (Exception fallbackEx)
+                {
+                    _logger.LogCritical(fallbackEx,
+                        "[Launch] Direct acs.exe launch also FAILED — giving up.");
+                    session.StartTimeUtc = DateTime.UtcNow;
+                    session = _sessionManager.EndSession(session);
+                    return session;
+                }
+            }
+            else
+            {
+                _logger.LogCritical(
+                    "[Launch] Neither TrickyStarter nor acs.exe could launch the game. " +
+                    "Check AC_ROOT='{AcRoot}' is correct.", _acTools.AcRoot);
+                session.StartTimeUtc = DateTime.UtcNow;
+                session = _sessionManager.EndSession(session);
+                return session;
+            }
         }
 
         // ── 4. Poll until acs.exe (the real engine) appears ───────────────────
@@ -99,8 +153,11 @@ public sealed class GameLauncherService
 
         if (gameProc == null)
         {
-            _logger.LogWarning("[Launch] acs.exe did not appear within 120 s — aborting.");
-            launcherProc?.Dispose();
+            _logger.LogError(
+                "[Launch] acs.exe did NOT appear within 120 s. " +
+                "Possible causes: TrickyStarter failed silently, Steam blocked launch, " +
+                "or AC_ROOT is wrong ('{AcRoot}').", _acTools.AcRoot);
+            if (starter != null) SafeCleanup(starter);
             session.StartTimeUtc = DateTime.UtcNow;
             session = _sessionManager.EndSession(session);
             return session;
@@ -112,14 +169,21 @@ public sealed class GameLauncherService
         // Fire the WPF callback so the countdown clock resets to NOW
         OnGameStarted?.Invoke();
 
-        // ── 5. Arm the session timer ──────────────────────────────────────────
+        // ── 5. Fire-and-forget: auto-click "Start Engine" ─────────────────────
+        //    Runs concurrently — waits for the game window to become interactive,
+        //    then sends SPACE.  Does NOT block the session timer.
+        _ = Task.Run(
+            () => _startEngine.AutoStartEngineAsync(externalCancellation),
+            externalCancellation);
+
+        // ── 6. Arm the session timer ──────────────────────────────────────────
         using var timerCts = new CancellationTokenSource(
             TimeSpan.FromMinutes(config.DurationMinutes));
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(
             timerCts.Token, externalCancellation);
         var ct = linked.Token;
 
-        // ── 6. Wait for acs.exe to exit or for a cancellation signal ──────────
+        // ── 7. Wait for acs.exe to exit or for a cancellation signal ──────────
         try
         {
             await gameProc.WaitForExitAsync(ct).ConfigureAwait(false);
@@ -158,7 +222,7 @@ public sealed class GameLauncherService
         finally
         {
             gameProc?.Dispose();
-            launcherProc?.Dispose();
+            if (starter != null) SafeCleanup(starter);
         }
 
         session = _sessionManager.EndSession(session);
@@ -213,6 +277,23 @@ public sealed class GameLauncherService
                 catch { /* best-effort */ }
                 finally { p.Dispose(); }
             }
+        }
+    }
+
+    /// <summary>
+    /// Restores AssettoCorsa.exe from TrickyStarter's backup without throwing.
+    /// Called in finally blocks so it must never propagate exceptions.
+    /// </summary>
+    private void SafeCleanup(TrickyStarter starter)
+    {
+        try
+        {
+            starter.CleanUp();
+            _logger.LogInformation("[Launch] TrickyStarter cleanup complete — AssettoCorsa.exe restored.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[Launch] TrickyStarter cleanup failed — AssettoCorsa.exe may need manual restore.");
         }
     }
 

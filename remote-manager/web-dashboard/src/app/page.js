@@ -9,24 +9,24 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:4000"
 // ── Inner dashboard ───────────────────────────────────────────────────────────
 function Dashboard({ token }) {
   const { connected } = useSocket();
-  const [devices, setDevices]   = useState([]);
+  const [devices, setDevices] = useState([]);
   const [sessions, setSessions] = useState([]);
-  const [report, setReport]     = useState(null);
-  const [tab, setTab]           = useState("devices");
-  const [loading, setLoading]   = useState(true);
+  const [report, setReport] = useState(null);
+  const [tab, setTab] = useState("devices");
+  const [loading, setLoading] = useState(true);
 
   const authHeaders = { Authorization: `Bearer ${token}` };
 
   const fetchAll = useCallback(async () => {
     try {
       const [devRes, sessRes] = await Promise.all([
-        fetch(`${SERVER_URL}/devices`,  { headers: authHeaders }),
+        fetch(`${SERVER_URL}/devices`, { headers: authHeaders }),
         fetch(`${SERVER_URL}/sessions`, { headers: authHeaders }),
       ]);
       setDevices(await devRes.json());
       const s = await sessRes.json();
       setSessions(Array.isArray(s) ? s : [s].filter(Boolean));
-    } catch {}
+    } catch { }
     setLoading(false);
   }, [token]);
 
@@ -35,15 +35,15 @@ function Dashboard({ token }) {
     try {
       const r = await fetch(`${SERVER_URL}/reports/daily?date=${today}`, { headers: authHeaders });
       setReport(await r.json());
-    } catch {}
+    } catch { }
   }, [token]);
 
   useEffect(() => { fetchAll(); fetchReport(); }, [fetchAll, fetchReport]);
 
-  const onlineCount    = devices.filter(d => d.status !== "offline").length;
-  const activeCount    = devices.filter(d => d.status === "in_session").length;
+  const onlineCount = devices.filter(d => d.status !== "offline").length;
+  const activeCount = devices.filter(d => d.status === "in_session").length;
   const completedToday = report?.total_sessions ?? 0;
-  const minutesToday   = report?.total_minutes  ?? 0;
+  const minutesToday = report?.total_minutes ?? 0;
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -53,14 +53,14 @@ function Dashboard({ token }) {
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-lg bg-red-600 flex items-center justify-center">
               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
             <span className="font-bold text-sm">AC Remote Manager</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-400 animate-pulse" : "bg-gray-600"}`}/>
+              <span className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-400 animate-pulse" : "bg-gray-600"}`} />
               <span className="text-xs text-gray-400">{connected ? "Live" : "Offline"}</span>
             </div>
           </div>
@@ -71,10 +71,10 @@ function Dashboard({ token }) {
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label: "PCs Online",     value: onlineCount,                color: "text-emerald-400" },
-            { label: "In Session",     value: activeCount,                color: "text-amber-400"   },
-            { label: "Sessions Today", value: completedToday,             color: "text-blue-400"    },
-            { label: "Minutes Today",  value: minutesToday.toFixed(1),    color: "text-purple-400"  },
+            { label: "PCs Online", value: onlineCount, color: "text-emerald-400" },
+            { label: "In Session", value: activeCount, color: "text-amber-400" },
+            { label: "Sessions Today", value: completedToday, color: "text-blue-400" },
+            { label: "Minutes Today", value: minutesToday.toFixed(1), color: "text-purple-400" },
           ].map(s => (
             <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-2xl px-5 py-4">
               <p className="text-gray-500 text-xs mb-1">{s.label}</p>
@@ -126,7 +126,7 @@ function Dashboard({ token }) {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-800">
-                    {["Device","Car","Track","Mode","Duration","Status","Timer End"].map(h => (
+                    {["Device", "Car", "Track", "Mode", "Duration", "Status", "Timer End"].map(h => (
                       <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
@@ -145,9 +145,9 @@ function Dashboard({ token }) {
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
                           ${s.status === "completed" ? "bg-emerald-500/15 text-emerald-400" :
-                            s.status === "running"   ? "bg-amber-500/15 text-amber-400" :
-                            s.status === "error"     ? "bg-red-500/15 text-red-400" :
-                            "bg-gray-700 text-gray-400"}`}>
+                            s.status === "running" ? "bg-amber-500/15 text-amber-400" :
+                              s.status === "error" ? "bg-red-500/15 text-red-400" :
+                                "bg-gray-700 text-gray-400"}`}>
                           {s.status}
                         </span>
                       </td>
@@ -184,7 +184,7 @@ function Dashboard({ token }) {
 
             {report?.per_device && (() => {
               let pd = {};
-              try { pd = JSON.parse(report.per_device); } catch {}
+              try { pd = JSON.parse(report.per_device); } catch { }
               const entries = Object.entries(pd);
               if (!entries.length) return <p className="text-gray-600 text-sm">No completed sessions today.</p>;
               return (

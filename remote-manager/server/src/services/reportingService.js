@@ -10,7 +10,8 @@ async function generateDailyReport(dateStr) {
             ROUND(COALESCE(SUM(s.actual_duration_min),0), 2) AS minutes
      FROM sessions s
      JOIN devices d ON d.id = s.device_id
-     WHERE date(COALESCE(s.start_time, s.created_at)) = $1 AND s.status = 'completed'
+     WHERE date(COALESCE(s.start_time, s.created_at), 'localtime') = $1
+       AND s.status = 'completed'
      GROUP BY d.id, d.display_name`,
     [date]
   );

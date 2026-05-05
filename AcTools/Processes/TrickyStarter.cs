@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -50,8 +50,9 @@ namespace AcTools.Processes {
             PreviewRun?.Invoke(this, new AcsRunEventArgs(Path.Combine(AcRoot, AcsName), Use32BitVersion));
             _launcherProcess = Process.Start(new ProcessStartInfo {
                 WorkingDirectory = AcRoot,
-                FileName = Path.GetFileName(_acLauncher),
-                Arguments = $"--first-stage {AcsName}"
+                FileName = _acLauncher,          // full path — bare filename fails with UseShellExecute=false
+                Arguments = $"--first-stage {AcsName}",
+                UseShellExecute = false,
             });
         }
 

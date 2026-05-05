@@ -117,6 +117,7 @@ public partial class App : Application
                     sp.GetRequiredService<ILogger<ReportingService>>()));
 
             sc.AddSingleton<SessionManager>();
+            sc.AddSingleton<StartEngineAutomator>();
             sc.AddSingleton<GameLauncherService>();
             sc.AddTransient<MainWindow>();
 

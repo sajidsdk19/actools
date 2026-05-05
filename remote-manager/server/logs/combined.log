@@ -269,3 +269,429 @@ SQL: INSERT INTO sessions
 [2026-04-29T22:11:12.268Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
 [2026-04-29T22:11:13.258Z] INFO: [Socket] SESSION_ENDED: b9d30ccb5c37ee6675d18ff5f9422f0d — 6.2 min
 [2026-04-29T22:11:38.827Z] INFO: [SessionCtrl] START_SESSION → device 9cd9ff199262d2bd11f01863da04170b, session 37f20b013bc9c2454172fcd2d1180977
+[2026-05-01T13:17:37.209Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-01T13:17:37.212Z] INFO: [DB] SQLite migrations complete
+[2026-05-01T13:17:37.221Z] INFO: Server listening on :4000
+[2026-05-01T13:17:37.492Z] INFO: [Socket] Dashboard connected (bypass): IiBU49Gu2W8mykTcAAAB
+[2026-05-01T13:17:39.089Z] INFO: [Reporting] Daily report for 2026-05-01: 0 sessions, 0 min
+[2026-05-01T13:17:39.092Z] INFO: [Socket] Dashboard connected (bypass): ahvk_ixSk9AuRyZkAAAD
+[2026-05-01T13:17:39.128Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-01T13:17:48.756Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:17:49.235Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:17:51.196Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:17:59.667Z] INFO: [Socket] Dashboard connected (bypass): wcHtxcj3OVPk2h0mAAAH
+[2026-05-01T13:18:01.863Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:18:02.135Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:18:02.300Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:18:02.451Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:18:02.669Z] WARN: [SessionCtrl] FORCE_STOP → device 9cd9ff199262d2bd11f01863da04170b
+[2026-05-01T13:18:22.112Z] INFO: [Socket] Dashboard connected (bypass): PmEFSifvcBuX2YnmAAAJ
+[2026-05-01T13:20:47.994Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-01T13:20:48.002Z] INFO: [DB] SQLite migrations complete
+[2026-05-01T13:20:48.003Z] WARN: [DB] Startup cleanup: resetting 1 stuck device(s) to offline
+[2026-05-01T13:20:48.004Z] WARN: [DB]   → "Gaming-PC-2" was in_session — reset to offline
+[2026-05-01T13:20:48.795Z] WARN: [DB] Startup cleanup: marking 5 orphaned session(s) as 'error'
+[2026-05-01T13:20:48.851Z] INFO: Server listening on :4000
+[2026-05-01T13:20:49.807Z] INFO: [Socket] Dashboard connected (bypass): yY5-J44euJxR1rs_AAAB
+[2026-05-01T13:20:49.971Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-01T13:20:54.229Z] INFO: [Socket] Dashboard connected (bypass): 7MMMGbLrRA_mG4NKAAAF
+[2026-05-01T13:21:45.570Z] INFO: [Socket] Dashboard connected (bypass): VXbCBYI5dTV7iQwTAAAH
+[2026-05-04T20:15:13.830Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:15:13.840Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:15:13.842Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:15:13.846Z] INFO: Server listening on :4000
+[2026-05-04T20:15:15.333Z] INFO: [Reporting] Daily report for 2026-05-04: 0 sessions, 0 min
+[2026-05-04T20:15:15.341Z] INFO: [Socket] Dashboard connected (bypass): MJD8menwyCCt2fsaAAAB
+[2026-05-04T20:15:16.362Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:15:26.723Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 16342308f04a6841da63034f3bb21285
+[2026-05-04T20:17:59.672Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-04T20:18:00.450Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-04T20:29:26.853Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:29:26.856Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:29:26.857Z] WARN: [DB] Startup cleanup: resetting 1 stuck device(s) to offline
+[2026-05-04T20:29:26.858Z] WARN: [DB]   → "TEST-PC-1" was in_session — reset to offline
+[2026-05-04T20:29:26.865Z] WARN: [DB] Startup cleanup: marking 1 orphaned session(s) as 'error'
+[2026-05-04T20:29:26.875Z] INFO: Server listening on :4000
+[2026-05-04T20:29:27.808Z] INFO: [Socket] Dashboard connected (bypass): mJTXvFESNPTryVSsAAAB
+[2026-05-04T20:29:28.119Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:29:40.040Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session e95d4dfe6c0e762e77528ffd940cb52e
+[2026-05-04T20:29:40.858Z] INFO: [Socket] SESSION_ENDED: e95d4dfe6c0e762e77528ffd940cb52e — 0.0 min
+[2026-05-04T20:31:59.959Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:32:03.916Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:32:18.237Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:32:35.495Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:33:25.605Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:33:25.609Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:33:25.610Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:33:25.615Z] INFO: Server listening on :4000
+[2026-05-04T20:33:26.659Z] INFO: [Socket] Dashboard connected (bypass): 1SezjdINmM67Z034AAAB
+[2026-05-04T20:33:28.952Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:33:39.183Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:33:55.143Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:34:00.844Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 3b2ee7d19d11d3619057da7a19d24328
+[2026-05-04T20:34:01.417Z] INFO: [Socket] SESSION_ENDED: 3b2ee7d19d11d3619057da7a19d24328 — 0.0 min
+[2026-05-04T20:34:06.757Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 5e2b3d3403dd63253ab87e420cd78341
+[2026-05-04T20:34:07.359Z] INFO: [Socket] SESSION_ENDED: 5e2b3d3403dd63253ab87e420cd78341 — 0.0 min
+[2026-05-04T20:34:34.551Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:37:06.270Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:37:06.273Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:37:06.274Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:37:06.277Z] INFO: Server listening on :4000
+[2026-05-04T20:37:07.373Z] INFO: [Socket] Dashboard connected (bypass): DtQuHNgNcuGDL0y-AAAB
+[2026-05-04T20:37:08.212Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:37:16.132Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session a43d21a963b1409129eab9596a6c4b7a
+[2026-05-04T20:37:16.906Z] INFO: [Socket] SESSION_ENDED: a43d21a963b1409129eab9596a6c4b7a — 0.0 min
+[2026-05-04T20:42:53.197Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:42:53.203Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:42:53.204Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:42:53.209Z] INFO: Server listening on :4000
+[2026-05-04T20:42:54.235Z] INFO: [Socket] Dashboard connected (bypass): yE2z0bTqgD9s-2FYAAAB
+[2026-05-04T20:42:54.932Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:43:02.767Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 122bd852bfd5eb0782513d14fdcab5e1
+[2026-05-04T20:43:03.333Z] INFO: [Socket] SESSION_ENDED: 122bd852bfd5eb0782513d14fdcab5e1 — 0.0 min
+[2026-05-04T20:43:20.312Z] WARN: [Socket] Agent rejected — bad token
+[2026-05-04T20:48:15.315Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:48:15.318Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:48:15.320Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:48:15.325Z] INFO: Server listening on :4000
+[2026-05-04T20:48:16.407Z] INFO: [Socket] Dashboard connected (bypass): F92v9YXC_tuuB10XAAAB
+[2026-05-04T20:48:19.316Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:48:23.259Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 6e06c2b349609cbf5c3b77de49912f68
+[2026-05-04T20:48:23.983Z] INFO: [Socket] SESSION_ENDED: 6e06c2b349609cbf5c3b77de49912f68 — 0.0 min
+[2026-05-04T20:48:31.462Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 7e0b2db763f1f31c62edf8f7c2a046f4
+[2026-05-04T20:48:32.014Z] INFO: [Socket] SESSION_ENDED: 7e0b2db763f1f31c62edf8f7c2a046f4 — 0.0 min
+[2026-05-04T20:49:09.201Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:49:09.205Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:49:09.206Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:49:09.210Z] INFO: Server listening on :4000
+[2026-05-04T20:49:09.372Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:49:10.229Z] INFO: [Socket] Dashboard connected (bypass): cxbzMKWSWD-9bvKTAAAD
+[2026-05-04T20:51:00.480Z] INFO: [Devices] Registered: Gaming-PC-10
+[2026-05-04T20:51:00.512Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T20:51:11.135Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T20:51:18.261Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:51:18.266Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:51:18.267Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:51:18.272Z] INFO: Server listening on :4000
+[2026-05-04T20:51:19.444Z] INFO: [Socket] Dashboard connected (bypass): lGzv4iAQHHkeHkWqAAAB
+[2026-05-04T20:51:19.875Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:51:22.898Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T20:51:37.400Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 780d85e9a17ba139b1e3b01c1eb79b7b
+[2026-05-04T20:51:37.409Z] ERROR: [Socket] SESSION_ERROR on 780d85e9a17ba139b1e3b01c1eb79b7b: AcAgent.exe not found at: "C:\AcRemoteAgent\AcAgent\AcAgentCli.exe". Check AC_AGENT_EXE in .env
+[2026-05-04T20:52:25.588Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:52:25.592Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:52:25.593Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:52:25.600Z] INFO: Server listening on :4000
+[2026-05-04T20:52:26.591Z] INFO: [Socket] Dashboard connected (bypass): KjQ1ot-VwGz821a7AAAB
+[2026-05-04T20:52:30.060Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T20:52:30.075Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:52:35.758Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T20:52:48.133Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T20:52:57.086Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session fb0fc4416913da89e653b805b51752c5
+[2026-05-04T20:52:57.715Z] INFO: [Socket] SESSION_ENDED: fb0fc4416913da89e653b805b51752c5 — 0.0 min
+[2026-05-04T20:53:05.383Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session a2afe96de902a399f346f38722143f91
+[2026-05-04T20:53:05.924Z] INFO: [Socket] SESSION_ENDED: a2afe96de902a399f346f38722143f91 — 0.0 min
+[2026-05-04T20:53:19.543Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T20:53:58.861Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T20:54:06.535Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T20:54:06.537Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T20:54:06.538Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T20:54:06.543Z] INFO: Server listening on :4000
+[2026-05-04T20:54:07.469Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T20:54:07.602Z] INFO: [Socket] Dashboard connected (bypass): H1FwFQ3Nvs6SlPItAAAD
+[2026-05-04T20:54:10.982Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T20:54:14.203Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 6d368520708bc108dcc590d63762b4c1
+[2026-05-04T20:54:14.944Z] INFO: [Socket] SESSION_ENDED: 6d368520708bc108dcc590d63762b4c1 — 0.0 min
+[2026-05-04T20:54:19.255Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 1a1312cd814337a5d386fcb774b166d8
+[2026-05-04T20:54:19.800Z] INFO: [Socket] SESSION_ENDED: 1a1312cd814337a5d386fcb774b166d8 — 0.0 min
+[2026-05-04T20:58:52.378Z] INFO: [Socket] SESSION_ENDED: 16342308f04a6841da63034f3bb21285 — 43.4 min
+[2026-05-04T21:02:07.873Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T21:02:07.876Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T21:02:07.877Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T21:02:07.880Z] INFO: Server listening on :4000
+[2026-05-04T21:02:08.669Z] INFO: [Socket] Dashboard connected (bypass): 7su6EwmdQL_3qLHAAAAB
+[2026-05-04T21:02:08.807Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T21:02:12.825Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T21:02:21.127Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 88887f63624eb51256a3d3750288f8a3
+[2026-05-04T21:02:21.685Z] INFO: [Socket] SESSION_ENDED: 88887f63624eb51256a3d3750288f8a3 — 0.0 min
+[2026-05-04T21:02:33.987Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session be8962a2d7b159ca8255832a9fb37da5
+[2026-05-04T21:02:34.660Z] INFO: [Socket] SESSION_STARTED: be8962a2d7b159ca8255832a9fb37da5
+[2026-05-04T21:02:35.587Z] INFO: [Socket] SESSION_ENDED: be8962a2d7b159ca8255832a9fb37da5 — 0.0 min
+[2026-05-04T21:02:43.417Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 847fdb629a9ea877461e31feb384e3ab
+[2026-05-04T21:02:43.927Z] INFO: [Socket] SESSION_STARTED: 847fdb629a9ea877461e31feb384e3ab
+[2026-05-04T21:02:44.795Z] INFO: [Socket] SESSION_ENDED: 847fdb629a9ea877461e31feb384e3ab — 0.0 min
+[2026-05-04T21:02:50.206Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 70d40327df7b32f0111bafc9abcc2f72
+[2026-05-04T21:02:50.661Z] INFO: [Socket] SESSION_STARTED: 70d40327df7b32f0111bafc9abcc2f72
+[2026-05-04T21:02:51.520Z] INFO: [Socket] SESSION_ENDED: 70d40327df7b32f0111bafc9abcc2f72 — 0.0 min
+[2026-05-04T21:03:09.985Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T21:14:20.438Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T21:14:20.444Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T21:14:20.445Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T21:14:20.451Z] INFO: Server listening on :4000
+[2026-05-04T21:14:21.516Z] INFO: [Socket] Dashboard connected (bypass): 5oVm4gH7bEr8zEdVAAAB
+[2026-05-04T21:14:24.977Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T21:14:47.564Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T21:15:05.162Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 52207d3a8f34e8b3c5660ac976815d3d
+[2026-05-04T21:15:05.695Z] INFO: [Socket] SESSION_ENDED: 52207d3a8f34e8b3c5660ac976815d3d — 0.0 min
+[2026-05-04T21:15:15.440Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session dab86c64b4f38113a1cf836ae6ff51a5
+[2026-05-04T21:15:15.927Z] INFO: [Socket] SESSION_STARTED: dab86c64b4f38113a1cf836ae6ff51a5
+[2026-05-04T21:15:16.734Z] INFO: [Socket] SESSION_ENDED: dab86c64b4f38113a1cf836ae6ff51a5 — 0.0 min
+[2026-05-04T21:16:04.106Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session fbd1dea13e4c21b968d0bb2aedf195aa
+[2026-05-04T21:16:04.646Z] INFO: [Socket] SESSION_ENDED: fbd1dea13e4c21b968d0bb2aedf195aa — 0.0 min
+[2026-05-04T21:30:41.858Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T21:30:41.862Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T21:30:41.864Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T21:30:41.868Z] INFO: Server listening on :4000
+[2026-05-04T21:30:42.841Z] INFO: [Socket] Dashboard connected (bypass): pYvoFWJk2mb3Ijq8AAAB
+[2026-05-04T21:30:43.067Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T21:35:14.759Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T21:35:14.762Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T21:35:14.763Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T21:35:14.767Z] INFO: Server listening on :4000
+[2026-05-04T21:35:15.873Z] INFO: [Socket] Dashboard connected (bypass): CXcmujAF01iECSCEAAAB
+[2026-05-04T21:35:16.811Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T21:35:23.502Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T21:35:32.798Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 618abaeea629095df897f53cdde571f1
+[2026-05-04T21:35:34.329Z] INFO: [Socket] SESSION_STARTED: 618abaeea629095df897f53cdde571f1
+[2026-05-04T21:35:38.736Z] INFO: [Socket] SESSION_ENDED: 618abaeea629095df897f53cdde571f1 — 0.1 min
+[2026-05-04T21:37:54.002Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T21:38:47.725Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T21:38:47.730Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T21:38:47.731Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T21:38:47.736Z] INFO: Server listening on :4000
+[2026-05-04T21:38:48.720Z] INFO: [Socket] Dashboard connected (bypass): eg3lP43tpgD5xREXAAAB
+[2026-05-04T21:38:50.995Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T21:38:57.776Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T21:39:08.570Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 202bd95343a1d80bb8e01a6d0e93ab38
+[2026-05-04T21:39:10.133Z] INFO: [Socket] SESSION_STARTED: 202bd95343a1d80bb8e01a6d0e93ab38
+[2026-05-04T21:39:13.889Z] INFO: [Socket] SESSION_ENDED: 202bd95343a1d80bb8e01a6d0e93ab38 — 0.1 min
+[2026-05-04T21:47:38.458Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T22:09:34.421Z] INFO: [Socket] Dashboard connected (bypass): P3Ot2-tI3gUaJddnAAAH
+[2026-05-04T22:29:05.312Z] INFO: [Socket] Dashboard connected (bypass): IZv-TcpztVpvzqWRAAAJ
+[2026-05-04T22:32:07.127Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:32:07.130Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:32:07.131Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:32:07.136Z] INFO: Server listening on :4000
+[2026-05-04T22:32:07.661Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:32:08.327Z] INFO: [Socket] Dashboard connected (bypass): gBtV3fJkCf6xK39eAAAD
+[2026-05-04T22:34:49.949Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:34:49.954Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:34:49.955Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:34:49.961Z] INFO: Server listening on :4000
+[2026-05-04T22:34:51.081Z] INFO: [Socket] Dashboard connected (bypass): iaobXu9n86yhDEWNAAAB
+[2026-05-04T22:34:52.068Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:35:04.383Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session d31f2987377913145c894a401dfadcb3
+[2026-05-04T22:35:06.203Z] INFO: [Socket] SESSION_STARTED: d31f2987377913145c894a401dfadcb3
+[2026-05-04T22:35:09.804Z] INFO: [Socket] SESSION_ENDED: d31f2987377913145c894a401dfadcb3 — 0.1 min
+[2026-05-04T22:36:59.603Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T22:37:12.277Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 9393f2ebb16600062cd790032beebf85
+[2026-05-04T22:37:38.767Z] INFO: [Socket] SESSION_STARTED: 9393f2ebb16600062cd790032beebf85
+[2026-05-04T22:37:58.248Z] INFO: [Socket] SESSION_ENDED: 9393f2ebb16600062cd790032beebf85 — 0.8 min
+[2026-05-04T22:38:33.302Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T22:42:17.400Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:42:17.403Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:42:17.404Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:42:17.407Z] INFO: Server listening on :4000
+[2026-05-04T22:42:20.062Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:43:31.665Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:43:31.668Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:43:31.669Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:43:31.673Z] INFO: Server listening on :4000
+[2026-05-04T22:43:35.228Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:43:43.643Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T22:45:08.738Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:45:08.741Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:45:08.742Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:45:08.748Z] INFO: Server listening on :4000
+[2026-05-04T22:45:12.132Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:48:11.776Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:48:11.779Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:48:11.780Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:48:11.784Z] INFO: Server listening on :4000
+[2026-05-04T22:48:12.996Z] INFO: [Socket] Dashboard connected (bypass): Bwl_4iDxP_2nZi_NAAAB
+[2026-05-04T22:48:15.857Z] INFO: [Socket] Dashboard connected (bypass): gfMkshmGzd0jWTljAAAD
+[2026-05-04T22:48:16.424Z] INFO: [Socket] Dashboard connected (bypass): rxcqNMNBiaGGsz_GAAAF
+[2026-05-04T22:48:16.455Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:48:16.920Z] INFO: [Socket] Dashboard connected (bypass): FTBO2pC636yiTW06AAAJ
+[2026-05-04T22:48:18.600Z] INFO: [Socket] Dashboard connected (bypass): 1Eupie-tRLxnIqDtAAAL
+[2026-05-04T22:48:26.067Z] INFO: [Socket] Dashboard connected (bypass): GVs7H0j9GZt8i5JbAAAN
+[2026-05-04T22:48:28.031Z] INFO: [Socket] Dashboard connected (bypass): 0oXKV2AfD6ulmQtuAAAP
+[2026-05-04T22:48:28.212Z] INFO: [Socket] Dashboard connected (bypass): Zek2VdYFxmD84lpOAAAR
+[2026-05-04T22:48:29.120Z] INFO: [Socket] Dashboard connected (bypass): jjVzTLviehFm57BaAAAT
+[2026-05-04T22:50:33.933Z] INFO: [Socket] Dashboard connected (bypass): G-j2pTd8AARRjLstAAAV
+[2026-05-04T22:50:35.661Z] INFO: [Socket] Dashboard connected (bypass): _5_xY_EXuz70CBffAAAX
+[2026-05-04T22:50:36.098Z] INFO: [Socket] Dashboard connected (bypass): hR0USVLNIwXqfFa0AAAZ
+[2026-05-04T22:50:36.258Z] INFO: [Socket] Dashboard connected (bypass): KgotogNn31h_simTAAAb
+[2026-05-04T22:50:36.404Z] INFO: [Socket] Dashboard connected (bypass): s-v_nAzQu-xmKQ2xAAAd
+[2026-05-04T22:50:36.702Z] INFO: [Socket] Dashboard connected (bypass): xUVhkX7E-eSwiJDIAAAf
+[2026-05-04T22:50:41.599Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T22:50:46.458Z] INFO: [Socket] Dashboard connected (bypass): h1jLvhBUj4dhMAPmAAAj
+[2026-05-04T22:51:08.286Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T22:54:24.829Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:54:24.832Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:54:24.833Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:54:24.837Z] INFO: Server listening on :4000
+[2026-05-04T22:54:25.279Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:54:25.943Z] INFO: [Socket] Dashboard connected (bypass): AFuf9S55pGjrFZKXAAAD
+[2026-05-04T22:54:27.383Z] INFO: [Socket] Dashboard connected (bypass): 7FSxgmJsyN96nhBbAAAF
+[2026-05-04T22:54:27.779Z] INFO: [Socket] Dashboard connected (bypass): e9bAZ4OVgG9t1t3YAAAH
+[2026-05-04T22:54:27.948Z] INFO: [Socket] Dashboard connected (bypass): LB_iyFdBTTwC89uEAAAJ
+[2026-05-04T22:54:28.111Z] INFO: [Socket] Dashboard connected (bypass): BZKWmsdbbcISeA1lAAAL
+[2026-05-04T22:54:29.095Z] INFO: [Socket] Dashboard connected (bypass): TJ8kiEAWpR6ruzwbAAAN
+[2026-05-04T22:58:18.008Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T22:58:18.011Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T22:58:18.012Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T22:58:18.016Z] INFO: Server listening on :4000
+[2026-05-04T22:58:19.168Z] INFO: [Socket] Dashboard connected (bypass): ZzT4XJzEptcj7AS3AAAB
+[2026-05-04T22:58:19.567Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T22:58:27.473Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session fa932b0580ccfb7782efd249d92389ba
+[2026-05-04T22:59:13.877Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-04T22:59:13.909Z] INFO: [Socket] SESSION_ENDED: fa932b0580ccfb7782efd249d92389ba — 0.8 min
+[2026-05-04T22:59:17.533Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T22:59:29.761Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 84ec426199c9d721e1c216660f1e6b04
+[2026-05-04T22:59:39.337Z] INFO: [Socket] SESSION_STARTED: 84ec426199c9d721e1c216660f1e6b04
+[2026-05-04T23:04:40.179Z] INFO: [Socket] SESSION_ENDED: 84ec426199c9d721e1c216660f1e6b04 — 5.2 min
+[2026-05-04T23:05:05.646Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:05:23.073Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:05:28.290Z] INFO: [Socket] Dashboard connected (bypass): y8qQE1eAEF1R7pchAAAJ
+[2026-05-04T23:05:38.309Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session fa52ed793bb1f9efe636d281ff463340
+[2026-05-04T23:05:39.854Z] INFO: [Socket] SESSION_STARTED: fa52ed793bb1f9efe636d281ff463340
+[2026-05-04T23:05:43.828Z] INFO: [Socket] SESSION_ENDED: fa52ed793bb1f9efe636d281ff463340 — 0.1 min
+[2026-05-04T23:06:52.213Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:07:14.355Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:07:20.873Z] INFO: [Socket] Dashboard connected (bypass): qgc2Z5wvV8eXUy8xAAAN
+[2026-05-04T23:07:31.361Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 1a318446e6b97a5e2085a922197872cc
+[2026-05-04T23:07:35.923Z] INFO: [Socket] SESSION_STARTED: 1a318446e6b97a5e2085a922197872cc
+[2026-05-04T23:07:53.677Z] INFO: [Socket] SESSION_ENDED: 1a318446e6b97a5e2085a922197872cc — 0.4 min
+[2026-05-04T23:07:58.138Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:08:42.222Z] INFO: [Socket] Dashboard connected (bypass): NuW0SJ4O9uAQUFjsAAAP
+[2026-05-04T23:08:47.754Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:08:53.117Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session c5d7abf8ea5cb177e6fd1d59961603a3
+[2026-05-04T23:08:54.584Z] INFO: [Socket] SESSION_STARTED: c5d7abf8ea5cb177e6fd1d59961603a3
+[2026-05-04T23:08:58.363Z] INFO: [Socket] SESSION_ENDED: c5d7abf8ea5cb177e6fd1d59961603a3 — 0.1 min
+[2026-05-04T23:09:48.949Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:09:55.092Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:09:58.629Z] INFO: [Socket] Dashboard connected (bypass): UB3V-LhpmUDkZD9yAAAV
+[2026-05-04T23:10:06.261Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 1685f40a3f4df58e6f25658b2dc06029
+[2026-05-04T23:10:07.881Z] INFO: [Socket] SESSION_STARTED: 1685f40a3f4df58e6f25658b2dc06029
+[2026-05-04T23:10:11.890Z] INFO: [Socket] SESSION_ENDED: 1685f40a3f4df58e6f25658b2dc06029 — 0.1 min
+[2026-05-04T23:10:26.304Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:10:39.472Z] INFO: [Socket] Dashboard connected (bypass): RUS6tpDHaEkBl3feAAAX
+[2026-05-04T23:10:51.315Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:10:56.380Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 08e8ccddcb8b22bc8df6554d9942cf42
+[2026-05-04T23:10:57.905Z] INFO: [Socket] SESSION_STARTED: 08e8ccddcb8b22bc8df6554d9942cf42
+[2026-05-04T23:11:01.748Z] INFO: [Socket] SESSION_ENDED: 08e8ccddcb8b22bc8df6554d9942cf42 — 0.1 min
+[2026-05-04T23:11:12.798Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:11:26.973Z] INFO: [Socket] Dashboard connected (bypass): A1J2INEXnV3_gWQGAAAb
+[2026-05-04T23:11:30.935Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:11:40.166Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session d81a78aefbb86a957e25721485d3582a
+[2026-05-04T23:11:41.734Z] INFO: [Socket] SESSION_STARTED: d81a78aefbb86a957e25721485d3582a
+[2026-05-04T23:11:45.576Z] INFO: [Socket] SESSION_ENDED: d81a78aefbb86a957e25721485d3582a — 0.1 min
+[2026-05-04T23:12:05.211Z] INFO: [Socket] Dashboard connected (bypass): daDuFeFVkJWrEmTTAAAf
+[2026-05-04T23:12:08.827Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:12:18.481Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 2a0f315dc6e221d85882f7f082749695
+[2026-05-04T23:12:19.447Z] INFO: [Socket] SESSION_ENDED: 2a0f315dc6e221d85882f7f082749695 — 0.0 min
+[2026-05-04T23:12:20.052Z] INFO: [Socket] SESSION_STARTED: 2a0f315dc6e221d85882f7f082749695
+[2026-05-04T23:12:23.995Z] INFO: [Socket] SESSION_ENDED: 2a0f315dc6e221d85882f7f082749695 — 0.1 min
+[2026-05-04T23:12:47.734Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:12:55.801Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:15:12.169Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:15:16.926Z] INFO: [Socket] Dashboard connected (bypass): 4HPaVC098P3XdlLZAAAl
+[2026-05-04T23:15:22.029Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 100aefab76538f818b26a5df24e78f4d
+[2026-05-04T23:15:23.715Z] INFO: [Socket] SESSION_STARTED: 100aefab76538f818b26a5df24e78f4d
+[2026-05-04T23:15:27.526Z] INFO: [Socket] SESSION_ENDED: 100aefab76538f818b26a5df24e78f4d — 0.1 min
+[2026-05-04T23:15:44.453Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:19:07.026Z] INFO: [Socket] Dashboard connected (bypass): tipocHynDm0RVxmLAAAn
+[2026-05-04T23:19:35.522Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:19:44.060Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session ed1dcb519ae45cdc7c505ed0f037c1c1
+[2026-05-04T23:19:48.581Z] INFO: [Socket] SESSION_STARTED: ed1dcb519ae45cdc7c505ed0f037c1c1
+[2026-05-04T23:20:09.569Z] WARN: [SessionCtrl] FORCE_STOP → device 0f9eb31de8b877d43b9c42ea250a8e84
+[2026-05-04T23:20:09.689Z] INFO: [Socket] SESSION_ENDED: ed1dcb519ae45cdc7c505ed0f037c1c1 — 0.4 min
+[2026-05-04T23:20:14.089Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-04T23:20:56.675Z] INFO: [Socket] Dashboard connected (bypass): LERgWijmdTSZkWx2AAAr
+[2026-05-04T23:22:11.858Z] INFO: [Devices] Registered: Gaming-PC-sdk
+[2026-05-04T23:22:11.898Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-04T23:22:22.900Z] INFO: [Socket] Dashboard connected (bypass): _zCiMfbbf0cB3YvWAAAv
+[2026-05-04T23:22:27.853Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session 552bc88caaab09c464943c463391d23e
+[2026-05-04T23:22:29.374Z] INFO: [Socket] SESSION_STARTED: 552bc88caaab09c464943c463391d23e
+[2026-05-04T23:22:33.048Z] INFO: [Socket] SESSION_ENDED: 552bc88caaab09c464943c463391d23e — 0.1 min
+[2026-05-04T23:23:07.311Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-04T23:23:14.179Z] INFO: [Socket] Dashboard connected (bypass): LGJzHYuULcr6f9L1AAAz
+[2026-05-04T23:23:19.419Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session 66a415dc5399b3719e1fef9a21881440
+[2026-05-04T23:23:20.929Z] INFO: [Socket] SESSION_STARTED: 66a415dc5399b3719e1fef9a21881440
+[2026-05-04T23:23:20.938Z] INFO: [Socket] SESSION_STARTED: 66a415dc5399b3719e1fef9a21881440
+[2026-05-04T23:23:24.539Z] INFO: [Socket] SESSION_ENDED: 66a415dc5399b3719e1fef9a21881440 — 0.1 min
+[2026-05-04T23:23:24.548Z] INFO: [Socket] SESSION_ENDED: 66a415dc5399b3719e1fef9a21881440 — 0.1 min
+[2026-05-04T23:23:37.064Z] INFO: [Socket] Agent disconnected: Gaming-PC-sdk
+[2026-05-04T23:23:42.125Z] INFO: [Socket] Agent disconnected: Gaming-PC-sdk
+[2026-05-04T23:23:56.004Z] INFO: [Socket] Dashboard connected (bypass): LTzF6qqYHWDSHll5AAA1
+[2026-05-04T23:24:01.985Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-04T23:24:08.900Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session d6e09d11447d8d57d13c54f06c4f5d68
+[2026-05-04T23:24:10.487Z] INFO: [Socket] SESSION_STARTED: d6e09d11447d8d57d13c54f06c4f5d68
+[2026-05-04T23:24:14.241Z] INFO: [Socket] SESSION_ENDED: d6e09d11447d8d57d13c54f06c4f5d68 — 0.1 min
+[2026-05-04T23:24:25.823Z] INFO: [Socket] Agent disconnected: Gaming-PC-sdk
+[2026-05-04T23:25:26.430Z] INFO: [Socket] Dashboard connected (bypass): i9W0EA0YEiJCUXEdAAA5
+[2026-05-04T23:32:02.652Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-04T23:32:02.656Z] INFO: [DB] SQLite migrations complete
+[2026-05-04T23:32:02.658Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-04T23:32:02.664Z] INFO: Server listening on :4000
+[2026-05-04T23:32:02.776Z] INFO: [Socket] Dashboard connected (bypass): IeGWyuNsOXGxOSmgAAAD
+[2026-05-04T23:32:02.777Z] INFO: [Socket] Dashboard connected (bypass): CpRi42z0ysKcgh6kAAAE
+[2026-05-04T23:32:02.779Z] INFO: [Socket] Dashboard connected (bypass): litIJ3v4m1GV3K7cAAAF
+[2026-05-04T23:32:02.790Z] INFO: [Socket] Dashboard connected (bypass): tE2C6PgNWTUnFyhZAAAH
+[2026-05-04T23:32:03.745Z] INFO: [Socket] Dashboard connected (bypass): kA-Ces4LSorozq4bAAAJ
+[2026-05-04T23:32:05.220Z] INFO: [Socket] Dashboard connected (bypass): HteN3Hrl9f1BuTpjAAAL
+[2026-05-04T23:32:07.431Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-04T23:32:21.108Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 7378a12d07993cabe02a739110634200
+[2026-05-04T23:32:22.637Z] INFO: [Socket] SESSION_STARTED: 7378a12d07993cabe02a739110634200
+[2026-05-04T23:32:26.799Z] INFO: [Socket] SESSION_ENDED: 7378a12d07993cabe02a739110634200 — 0.1 min
+[2026-05-04T23:32:50.420Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-04T23:33:00.339Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 88d6f1d65a151276bd049e8687395b5c
+[2026-05-04T23:33:24.698Z] INFO: [Socket] SESSION_STARTED: 88d6f1d65a151276bd049e8687395b5c
+[2026-05-04T23:37:24.853Z] INFO: [Socket] SESSION_ENDED: 88d6f1d65a151276bd049e8687395b5c — 4.4 min
+[2026-05-04T23:37:43.545Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-05T00:21:25.091Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-05T00:21:25.096Z] INFO: [DB] SQLite migrations complete
+[2026-05-05T00:21:25.097Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-05T00:21:25.102Z] INFO: Server listening on :4000
+[2026-05-05T00:21:27.075Z] INFO: [Reporting] Daily report for 2026-05-05: 39 sessions, 56.839999999999996 min
+[2026-05-05T00:21:27.087Z] INFO: [Socket] Dashboard connected (bypass): dMhU5Jt1t3HC8nHoAAAB
+[2026-05-05T00:21:29.928Z] INFO: [Socket] Agent connected: TEST-PC-1 (5d4d90e9d0316c44580277f42dbe6436)
+[2026-05-05T00:23:05.392Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-05T00:23:09.687Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-05T00:23:15.851Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-05T00:24:37.472Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session c3f0983b614970469eb09bf4431e6f95
+[2026-05-05T00:24:38.425Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-05T00:24:39.004Z] INFO: [Socket] SESSION_ENDED: c3f0983b614970469eb09bf4431e6f95 — 0.0 min
+[2026-05-05T00:24:48.946Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 6022f906d86ac5ad71d10ebb362974e6
+[2026-05-05T00:25:16.748Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-05T00:25:17.605Z] INFO: [Socket] SESSION_ENDED: 6022f906d86ac5ad71d10ebb362974e6 — 0.5 min
+[2026-05-05T00:26:05.036Z] INFO: [Socket] Dashboard connected (bypass): RDjZWuncCLCfWxCKAAAJ
+[2026-05-05T00:26:17.439Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 0e3da805358a95f7d4ace4510e46b1a3
+[2026-05-05T00:26:24.736Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 18f6d028cc30735ea0c61cd6361f1bc2
+[2026-05-05T00:26:27.442Z] INFO: [Socket] SESSION_STARTED: 18f6d028cc30735ea0c61cd6361f1bc2
+[2026-05-05T00:26:30.373Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-05T00:26:30.403Z] INFO: [Socket] SESSION_ENDED: 18f6d028cc30735ea0c61cd6361f1bc2 — 0.1 min
+[2026-05-05T00:27:03.799Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-05T00:27:12.356Z] INFO: [Socket] Dashboard connected (bypass): yjRooXiXxNPbcBGoAAAN
+[2026-05-05T00:27:21.465Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 02773d8260d79d7cfe080827386c1e6e
+[2026-05-05T00:27:55.465Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session d9b83eb64ac9cfa685481b29d24dd5ba
+[2026-05-05T00:28:00.082Z] INFO: [Socket] SESSION_STARTED: d9b83eb64ac9cfa685481b29d24dd5ba
+[2026-05-05T00:28:03.572Z] INFO: [Socket] SESSION_ENDED: d9b83eb64ac9cfa685481b29d24dd5ba — 0.1 min
+[2026-05-05T00:28:18.651Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-05T00:28:19.128Z] INFO: [Socket] SESSION_ENDED: 02773d8260d79d7cfe080827386c1e6e — 0.9 min
+[2026-05-05T00:29:28.634Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 888991956626af10041ae4d034886b3d
+[2026-05-05T00:29:31.071Z] INFO: [Socket] SESSION_STARTED: 888991956626af10041ae4d034886b3d
+[2026-05-05T00:29:34.700Z] INFO: [Socket] SESSION_ENDED: 888991956626af10041ae4d034886b3d — 0.1 min
+[2026-05-05T00:30:22.268Z] INFO: [Socket] Agent connected: Gaming-PC-10 (0f9eb31de8b877d43b9c42ea250a8e84)
+[2026-05-05T00:30:37.207Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session d0a35cac9cdc4a6b671fe4463df30716
+[2026-05-05T00:30:39.038Z] INFO: [Socket] SESSION_STARTED: d0a35cac9cdc4a6b671fe4463df30716
+[2026-05-05T00:30:42.457Z] INFO: [Socket] SESSION_ENDED: d0a35cac9cdc4a6b671fe4463df30716 — 0.1 min
+[2026-05-05T00:31:05.266Z] INFO: [SessionCtrl] START_SESSION → device 0f9eb31de8b877d43b9c42ea250a8e84, session 6cd9a0f0078fbb11ea722796efd5d8fa
+[2026-05-05T00:31:08.548Z] INFO: [Socket] SESSION_STARTED: 6cd9a0f0078fbb11ea722796efd5d8fa
+[2026-05-05T00:33:08.640Z] INFO: [Socket] SESSION_ENDED: 6cd9a0f0078fbb11ea722796efd5d8fa — 2.0 min
+[2026-05-05T00:33:13.655Z] INFO: [Socket] Agent disconnected: Gaming-PC-10
+[2026-05-05T00:35:50.561Z] INFO: [Socket] Dashboard connected (bypass): jxpD8AvVaTuAaKAkAAAR
+[2026-05-05T00:36:01.255Z] INFO: [SessionCtrl] START_SESSION → device 5d4d90e9d0316c44580277f42dbe6436, session 202fc70aab6897756cc5e6c4b0aef4ad
+[2026-05-05T00:36:35.658Z] WARN: [SessionCtrl] FORCE_STOP → device 5d4d90e9d0316c44580277f42dbe6436
+[2026-05-05T00:36:36.360Z] INFO: [Socket] SESSION_ENDED: 202fc70aab6897756cc5e6c4b0aef4ad — 0.6 min

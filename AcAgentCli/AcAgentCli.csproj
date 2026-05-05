@@ -35,6 +35,7 @@
     <Compile Include="..\AcAgent\Services\GameLauncherService.cs" />
     <Compile Include="..\AcAgent\Services\SessionManager.cs" />
     <Compile Include="..\AcAgent\Services\ReportingService.cs" />
+    <Compile Include="..\AcAgent\Services\StartEngineAutomator.cs" />
   </ItemGroup>
 
   <!-- Copy appsettings.json from the sibling project -->
