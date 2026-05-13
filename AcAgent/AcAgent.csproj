@@ -21,16 +21,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json"                               Version="13.0.3" />
-    <PackageReference Include="Microsoft.Data.Sqlite"                         Version="7.0.0"  />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection"      Version="7.0.0"  />
-    <PackageReference Include="Microsoft.Extensions.Logging"                  Version="7.0.0"  />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug"            Version="7.0.0"  />
-    <PackageReference Include="Microsoft.Extensions.Configuration"            Version="7.0.0"  />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json"       Version="7.0.0"  />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
     <!-- Excel export -->
-    <PackageReference Include="ClosedXML"                                     Version="0.102.2" />
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
   </ItemGroup>
 
   <ItemGroup>

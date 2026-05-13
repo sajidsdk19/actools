@@ -100,65 +100,105 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Pre-fills the UI with the CLI-provided settings and triggers Launch Race.
+    /// Directly launches a session from CLI args without relying on CarList.SelectedItem.
     /// Called only when AcAgent is started by the remote Node.js agent.
     /// </summary>
     private void ApplyAutoLaunchConfig(AutoLaunchConfig al)
     {
         try
         {
-            // ── Apply duration ─────────────────────────────────────────────
-            DurationSlider.Value = Math.Clamp(al.Duration, (int)DurationSlider.Minimum, (int)DurationSlider.Maximum);
+            // ── Resolve car: use CLI value if valid, else first available ──
+            var carId = (!string.IsNullOrEmpty(al.Car) &&
+                         _allCars.Contains(al.Car, StringComparer.OrdinalIgnoreCase))
+                ? _allCars.First(c => c.Equals(al.Car, StringComparison.OrdinalIgnoreCase))
+                : _allCars.Count > 0 ? _allCars[0] : null;
 
-            // ── Apply mode ───────────────────────────────────────────────
+            // ── Resolve track: use CLI value if valid, else first available ─
+            var trackId = (!string.IsNullOrEmpty(al.Track) &&
+                           _allTracks.Contains(al.Track, StringComparer.OrdinalIgnoreCase))
+                ? _allTracks.First(t => t.Equals(al.Track, StringComparison.OrdinalIgnoreCase))
+                : _allTracks.Count > 0 ? _allTracks[0] : null;
+
+            if (carId == null || trackId == null)
+            {
+                SetStatus("Auto-launch failed: no cars/tracks found in AC content folder.", isOk: false);
+                return;
+            }
+
+            // ── Update UI for visual feedback ──────────────────────────────
+            CarList.SelectedItem   = carId;
+            TrackList.SelectedItem = trackId;
+            DurationSlider.Value   = Math.Clamp(al.Duration,
+                (int)DurationSlider.Minimum, (int)DurationSlider.Maximum);
+
             if (al.Mode != null)
             {
                 foreach (ComboBoxItem item in ModeCombo.Items)
                 {
                     if (string.Equals(item.Tag?.ToString(), al.Mode, StringComparison.OrdinalIgnoreCase))
-                    {
-                        ModeCombo.SelectedItem = item;
-                        break;
-                    }
+                    { ModeCombo.SelectedItem = item; break; }
                 }
             }
-
-            // ── Apply assists ───────────────────────────────────────────
             if (al.EasyAssists)
             {
                 foreach (ComboBoxItem item in AssistsCombo.Items)
                 {
                     if (string.Equals(item.Tag?.ToString(), "Easy", StringComparison.OrdinalIgnoreCase))
-                    {
-                        AssistsCombo.SelectedItem = item;
-                        break;
-                    }
+                    { AssistsCombo.SelectedItem = item; break; }
                 }
             }
 
-            // ── Select car ────────────────────────────────────────────────
-            if (al.Car != null && _allCars.Contains(al.Car, StringComparer.OrdinalIgnoreCase))
-            {
-                CarList.SelectedItem = _allCars.FirstOrDefault(
-                    c => c.Equals(al.Car, StringComparison.OrdinalIgnoreCase));
-            }
+            var mode       = al.Mode ?? "Practice";
+            var duration   = al.Duration;
+            var driverName = DriverNameBox.Text?.Trim() is { Length: > 0 } n ? n : Environment.UserName;
+            var easy       = al.EasyAssists;
 
-            // ── Select track ──────────────────────────────────────────────
-            if (al.Track != null && _allTracks.Contains(al.Track, StringComparer.OrdinalIgnoreCase))
-            {
-                TrackList.SelectedItem = _allTracks.FirstOrDefault(
-                    t => t.Equals(al.Track, StringComparison.OrdinalIgnoreCase));
-            }
+            SetStatus($"Auto-launching: {carId} @ {trackId} — {duration} min", isOk: true);
 
-            // ── Status message ──────────────────────────────────────────
-            SetStatus($"Auto-launching: {al.Car ?? "(default car)"} @ {al.Track ?? "(default track)"} — {al.Duration} min", isOk: true);
-
-            // ── Trigger Launch Race ──────────────────────────────────────
-            // Small delay so UI renders first (makes debugging easier if something goes wrong)
-            Dispatcher.InvokeAsync(() =>
+            // ── Build config and launch directly — bypasses CarList.SelectedItem ─
+            var config = new GameConfig
             {
-                LaunchBtn_Click(this, new RoutedEventArgs());
-            }, System.Windows.Threading.DispatcherPriority.Background);
+                CarId           = carId,
+                TrackId         = trackId,
+                Mode            = Enum.TryParse<DriveMode>(mode, out var dm) ? dm : DriveMode.Practice,
+                DurationMinutes = duration,
+                DriverName      = driverName,
+                PcId            = Environment.MachineName,
+                EasyAssists     = easy,
+            };
+
+            _sessionDurationMinutes = duration;
+            _sessionStartTime       = DateTime.UtcNow;
+            _sessionCts             = new CancellationTokenSource();
+
+            ShowOverlay(SessionOverlay);
+            SessionInfoLabel.Text = $"{carId}  @  {trackId}";
+            SessionModeLabel.Text = mode;
+            StartCountdownTimer(duration);
+            SetStatus("Game is running…", isOk: true);
+
+            // Fire-and-forget on a background thread
+            Task.Run(async () =>
+            {
+                try
+                {
+                    _lastSession = await _launcher.LaunchAsync(config, _sessionCts.Token);
+                }
+                catch (OperationCanceledException) { }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() =>
+                        SetStatus($"Session error: {ex.Message}", isOk: false));
+                }
+                finally
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        StopCountdownTimer();
+                        ShowCompletePanel();
+                    });
+                }
+            });
         }
         catch (Exception ex)
         {

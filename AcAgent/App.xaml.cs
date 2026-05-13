@@ -59,8 +59,9 @@ public partial class App : Application
             //   --car lotus_elise_sc --track magione --mode Practice --duration 30 --ac-root <path>
             // We parse them all here so the WPF window can auto-launch the session.
             string? cliCar = null, cliTrack = null, cliLayout = null, cliMode = null, cliAcRoot = null;
-            int     cliDuration   = 30;
+            int     cliDuration    = 30;
             bool    cliEasyAssists = false;
+            bool    cliHasDuration = false;   // true when --duration was explicitly passed
 
             for (int i = 0; i < e.Args.Length; i++)
             {
@@ -72,13 +73,16 @@ public partial class App : Application
                     case "--layout"   when i + 1 < e.Args.Length: cliLayout  = e.Args[++i]; break;
                     case "--mode"     when i + 1 < e.Args.Length: cliMode    = e.Args[++i]; break;
                     case "--duration" when i + 1 < e.Args.Length:
-                        int.TryParse(e.Args[++i], out cliDuration); break;
+                        cliHasDuration = true;
+                        int.TryParse(e.Args[++i], out cliDuration);
+                        break;
                     case "--easy-assists": cliEasyAssists = true; break;
                 }
             }
 
-            // If any session arg was passed, set up AutoLaunch
-            if (cliCar != null || cliTrack != null || cliDuration != 30 || cliMode != null)
+            // Trigger AutoLaunch whenever ANY session arg is present
+            // (including --duration 30, which the old condition wrongly skipped)
+            if (cliCar != null || cliTrack != null || cliHasDuration || cliMode != null)
             {
                 AutoLaunch = new AutoLaunchConfig
                 {
@@ -102,7 +106,8 @@ public partial class App : Application
 
             sc.AddLogging(lb =>
             {
-                lb.AddDebug();
+                lb.AddConsole();   // ← CRITICAL: node agent reads stdout to detect "Game clock started"
+                lb.AddDebug();     //   Also log to VS debugger when attached
                 lb.SetMinimumLevel(LogLevel.Debug);
             });
 

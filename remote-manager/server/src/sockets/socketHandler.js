@@ -1,5 +1,6 @@
-const { pool } = require('../db/pool');
-const logger   = require('../utils/logger');
+const { pool }        = require('../db/pool');
+const logger          = require('../utils/logger');
+const acContentCache  = require('../services/acContentCache');
 
 function now() { return new Date().toISOString(); }
 
@@ -31,7 +32,20 @@ function registerSocketHandlers(io) {
         deviceId: device.id, machineName: device.machine_name, status: 'online',
       });
 
-      // Agent confirms game started
+      // ── AC Content catalogue (emitted by agent on connect + on SCAN_AC_CONTENT) ──
+      socket.on('AC_CONTENT', (data) => {
+        logger.info(
+          `[Socket] AC_CONTENT from ${device.machine_name}: ` +
+          `${data.cars?.length ?? 0} cars, ${data.tracks?.length ?? 0} tracks`
+        );
+        // Cache server-side so HTTP GET /devices/:id/ac-content works for late-joining dashboards
+        acContentCache.set(device.id, data);
+        // Relay to all dashboard clients
+        io.to('dashboard').emit('ac_content', { deviceId: device.id, ...data });
+      });
+
+      // ── Session events ──────────────────────────────────────────────────────
+
       socket.on('SESSION_STARTED', async (data) => {
         const { sessionId } = data;
         await pool.query(
@@ -41,13 +55,11 @@ function registerSocketHandlers(io) {
         logger.info(`[Socket] SESSION_STARTED: ${sessionId}`);
       });
 
-      // Timer ticks — relay to dashboards
       socket.on('TIMER_UPDATE', (data) => {
         const { sessionId, remainingSeconds } = data;
         io.to('dashboard').emit('timer_update', { sessionId, deviceId: device.id, remainingSeconds });
       });
 
-      // Session ended
       socket.on('SESSION_ENDED', async (data) => {
         const { sessionId, durationMinutes, timerEnded, playerExitedEarly } = data;
         await pool.query(
@@ -58,12 +70,11 @@ function registerSocketHandlers(io) {
           [now(), durationMinutes, timerEnded ? 1 : 0, playerExitedEarly ? 1 : 0, sessionId]
         );
         await pool.query(`UPDATE devices SET status='online' WHERE id=$1`, [device.id]);
-        io.to('dashboard').emit('session_ended', { sessionId, deviceId: device.id, durationMinutes });
+        io.to('dashboard').emit('session_ended',         { sessionId, deviceId: device.id, durationMinutes });
         io.to('dashboard').emit('device_status_changed', { deviceId: device.id, status: 'online' });
         logger.info(`[Socket] SESSION_ENDED: ${sessionId} — ${durationMinutes?.toFixed(1)} min`);
       });
 
-      // Agent error
       socket.on('SESSION_ERROR', async (data) => {
         const { sessionId, error } = data;
         logger.error(`[Socket] SESSION_ERROR on ${sessionId}: ${error}`);
@@ -89,16 +100,27 @@ function registerSocketHandlers(io) {
 
     // ── Dashboard connection ──────────────────────────────────────────────────
     if (type === 'dashboard') {
-      // Allow bypass when BYPASS_AUTH=true (Electron / no-login mode)
       if (process.env.BYPASS_AUTH === 'true') {
         socket.join('dashboard');
         logger.info(`[Socket] Dashboard connected (bypass): ${socket.id}`);
+
+        // ── Dashboard can request a content rescan for a specific device ────
+        socket.on('SCAN_AC_CONTENT', ({ deviceId }) => {
+          logger.info(`[Socket] Dashboard requesting SCAN_AC_CONTENT for device ${deviceId}`);
+          io.to(`device:${deviceId}`).emit('SCAN_AC_CONTENT');
+        });
+
         return;
       }
       try {
         jwt.verify(jwtToken, process.env.JWT_SECRET);
         socket.join('dashboard');
         logger.info(`[Socket] Dashboard connected: ${socket.id}`);
+
+        socket.on('SCAN_AC_CONTENT', ({ deviceId }) => {
+          logger.info(`[Socket] Dashboard requesting SCAN_AC_CONTENT for device ${deviceId}`);
+          io.to(`device:${deviceId}`).emit('SCAN_AC_CONTENT');
+        });
       } catch {
         logger.warn('[Socket] Dashboard rejected — bad JWT');
         socket.disconnect(true);

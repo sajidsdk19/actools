@@ -259,6 +259,21 @@ public sealed class AcToolsIntegration
         raceIni.Save();
         _logger.LogInformation("[Config] race.ini written to {Path}", raceIniPath);
 
+        // ── Diagnostic dump: log every line of the written race.ini ──────────
+        // This lets you verify the exact car/track in agent.log on the gaming PC.
+        try
+        {
+            var lines = File.ReadAllLines(raceIniPath);
+            _logger.LogInformation("[Config] ── race.ini contents ({Lines} lines) ──────────────────", lines.Length);
+            foreach (var line in lines)
+                _logger.LogInformation("[Config]   {Line}", line);
+            _logger.LogInformation("[Config] ── end of race.ini ────────────────────────────────────");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[Config] Could not read back race.ini for diagnostic dump.");
+        }
+
         // ── assists.ini ───────────────────────────────────────────────────────
         var assistsIniPath = Path.Combine(cfgDir, "assists.ini");
         var assistsIni = new AcTools.DataFile.IniFile(assistsIniPath);

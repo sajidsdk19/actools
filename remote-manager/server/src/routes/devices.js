@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const { pool }   = require('../db/pool');
 const { requireAuth, requireAgentSecret } = require('../middleware/auth');
 const logger     = require('../utils/logger');
+const acContentCache = require('../services/acContentCache');
 
 const router = express.Router();
 
@@ -80,6 +81,35 @@ router.get('/:id', requireAuth, async (req, res, next) => {
     if (!rows.length) return res.status(404).json({ error: 'Device not found' });
     res.json(rows[0]);
   } catch (e) { next(e); }
+});
+
+/**
+ * GET /devices/:id/ac-content
+ * Returns the last AC_CONTENT payload received from this device.
+ * The dashboard calls this on initial load for each device (before the
+ * socket event arrives) so dropdowns populate immediately.
+ */
+router.get('/:id/ac-content', requireAuth, (req, res) => {
+  const content = acContentCache.get(req.params.id);
+  if (!content) {
+    return res.status(404).json({
+      error: 'No content cached yet. Device may be offline or still scanning.',
+      cars: [], tracks: [],
+    });
+  }
+  res.json(content);
+});
+
+/**
+ * POST /devices/:id/scan
+ * Asks the device to re-scan its AC folder and emit fresh AC_CONTENT.
+ * Useful after the operator installs new cars / tracks on the gaming PC.
+ */
+router.post('/:id/scan', requireAuth, (req, res) => {
+  const io = req.app.get('io');
+  io.to(`device:${req.params.id}`).emit('SCAN_AC_CONTENT');
+  logger.info(`[Devices] SCAN_AC_CONTENT requested for device ${req.params.id}`);
+  res.json({ ok: true, message: 'Scan requested — results will arrive via socket ac_content event' });
 });
 
 module.exports = router;
