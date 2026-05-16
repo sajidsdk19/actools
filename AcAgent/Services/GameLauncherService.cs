@@ -85,6 +85,11 @@ public sealed class GameLauncherService
         //    Steam may complain. Better than a 0-second session.
         _logger.LogInformation("[Launch] Creating TrickyStarter to bypass main menu…");
 
+        // ── Lock race.ini read-only to block Steam Cloud from overwriting it ──────
+        // Steam Cloud syncs race.ini when the game starts. Without this lock,
+        // it would restore the previously-played car and ignore our selection.
+        _acTools.SetRaceIniReadOnly(true);
+
         TrickyStarter? starter = null;
         try
         {
@@ -166,6 +171,11 @@ public sealed class GameLauncherService
         _logger.LogInformation("[Launch] Game clock started — PID={Pid}", gameProc.Id);
         session.StartTimeUtc = DateTime.UtcNow;
 
+        // ── Unlock race.ini: acs.exe has read it, Steam Cloud window is closed ────
+        // The game is now running and has already loaded the car from race.ini.
+        // We restore write access so the game can update race.ini after the session.
+        _acTools.SetRaceIniReadOnly(false);
+
         // Fire the WPF callback so the countdown clock resets to NOW
         OnGameStarted?.Invoke();
 
@@ -223,6 +233,8 @@ public sealed class GameLauncherService
         {
             gameProc?.Dispose();
             if (starter != null) SafeCleanup(starter);
+            // Always unlock race.ini — even on failure — so it doesn't stay read-only permanently
+            _acTools.SetRaceIniReadOnly(false);
         }
 
         session = _sessionManager.EndSession(session);

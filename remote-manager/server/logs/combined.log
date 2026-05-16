@@ -1055,3 +1055,82 @@ SQL: INSERT INTO sessions
 [2026-05-08T14:50:19.919Z] INFO: Server listening on :4000
 [2026-05-08T14:50:22.742Z] INFO: [Socket] Dashboard connected (bypass): kFW2rowoMjJZ8hjJAAAB
 [2026-05-08T14:50:38.763Z] INFO: [Socket] Dashboard requesting SCAN_AC_CONTENT for device 899f90afe6f0fc034ea75901cf525a93
+[2026-05-16T21:37:55.777Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T21:37:55.786Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T21:37:55.788Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T21:37:55.792Z] INFO: Server listening on :4000
+[2026-05-16T21:37:56.726Z] INFO: [Reporting] Daily report for 2026-05-17: 0 sessions, 0 min
+[2026-05-16T21:37:56.795Z] INFO: [Socket] Dashboard connected (bypass): MK7lptyoyQmqKqRBAAAB
+[2026-05-16T21:38:37.953Z] INFO: [Socket] Dashboard requesting SCAN_AC_CONTENT for device 899f90afe6f0fc034ea75901cf525a93
+[2026-05-16T21:41:30.828Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T21:41:30.833Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T21:41:30.835Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T21:41:30.839Z] INFO: Server listening on :4000
+[2026-05-16T21:41:31.933Z] INFO: [Socket] Dashboard connected (bypass): 6di5ShDL2iptfxQsAAAB
+[2026-05-16T21:41:37.849Z] INFO: [Devices] Re-registered: Gaming-PC-sdk
+[2026-05-16T21:41:37.874Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-16T21:41:37.929Z] INFO: [Socket] AC_CONTENT from Gaming-PC-sdk: 180 cars, 21 tracks
+[2026-05-16T21:41:58.867Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T21:41:58.873Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T21:41:58.874Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T21:41:58.879Z] INFO: Server listening on :4000
+[2026-05-16T21:41:59.924Z] INFO: [Socket] Dashboard connected (bypass): CVF6bG4VCI7jr0qDAAAB
+[2026-05-16T21:42:02.738Z] INFO: [Devices] Updated (name change): Gaming-PC-sdk → Gaming-PC-sdk
+[2026-05-16T21:42:02.764Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-16T21:42:02.826Z] INFO: [Socket] AC_CONTENT from Gaming-PC-sdk: 180 cars, 21 tracks
+[2026-05-16T21:42:32.950Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session 5e5f2c15a0a62f5cbb0d6bcd11d577f5
+[2026-05-16T21:42:35.382Z] INFO: [Socket] SESSION_STARTED: 5e5f2c15a0a62f5cbb0d6bcd11d577f5
+[2026-05-16T21:42:58.411Z] WARN: [SessionCtrl] FORCE_STOP → device 899f90afe6f0fc034ea75901cf525a93
+[2026-05-16T21:42:58.485Z] INFO: [Socket] SESSION_ENDED: 5e5f2c15a0a62f5cbb0d6bcd11d577f5 — 0.4 min
+[2026-05-16T21:51:37.369Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T21:51:37.372Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T21:51:37.373Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T21:51:37.379Z] INFO: Server listening on :4000
+[2026-05-16T21:51:38.481Z] INFO: [Socket] Dashboard connected (bypass): 903s8_-s0S4a_AXpAAAB
+[2026-05-16T21:52:05.491Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T21:52:05.495Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T21:52:05.495Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T21:52:05.500Z] INFO: Server listening on :4000
+[2026-05-16T21:52:06.617Z] INFO: [Socket] Dashboard connected (bypass): UqBWtQkh5p0y_bVnAAAB
+[2026-05-16T21:52:08.123Z] INFO: [Devices] Updated (name change): Gaming-PC-sdk → Gaming-PC-sdk
+[2026-05-16T21:52:08.163Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-16T21:52:08.222Z] INFO: [Socket] AC_CONTENT from Gaming-PC-sdk: 180 cars, 21 tracks
+[2026-05-16T21:52:28.528Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session bc63cd8ef186d81a50bab6b2a6305344
+[2026-05-16T21:52:30.576Z] INFO: [Socket] SESSION_STARTED: bc63cd8ef186d81a50bab6b2a6305344
+[2026-05-16T21:52:49.601Z] INFO: [Socket] SESSION_ENDED: bc63cd8ef186d81a50bab6b2a6305344 — 0.3 min
+[2026-05-16T22:03:16.980Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T22:03:16.984Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T22:03:16.986Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T22:03:16.991Z] INFO: Server listening on :4000
+[2026-05-16T22:03:18.112Z] INFO: [Socket] Dashboard connected (bypass): 0TlC6es1i2UkAVaQAAAB
+[2026-05-16T22:03:32.770Z] INFO: [Devices] Updated (name change): Gaming-PC-sdk → Gaming-PC-sdk
+[2026-05-16T22:03:32.802Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-16T22:03:32.855Z] INFO: [Socket] AC_CONTENT from Gaming-PC-sdk: 180 cars, 21 tracks
+[2026-05-16T22:04:06.853Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session e1363a0f641f0c2ffa6e68e84ac06336
+[2026-05-16T22:04:08.914Z] INFO: [Socket] SESSION_STARTED: e1363a0f641f0c2ffa6e68e84ac06336
+[2026-05-16T22:04:28.768Z] WARN: [SessionCtrl] FORCE_STOP → device 899f90afe6f0fc034ea75901cf525a93
+[2026-05-16T22:04:28.845Z] INFO: [Socket] SESSION_ENDED: e1363a0f641f0c2ffa6e68e84ac06336 — 0.4 min
+[2026-05-16T22:08:14.942Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T22:08:14.946Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T22:08:14.947Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T22:08:14.952Z] INFO: Server listening on :4000
+[2026-05-16T22:08:15.729Z] INFO: [Socket] Dashboard connected (bypass): NL4IvHOdMK_XGRMYAAAB
+[2026-05-16T22:08:23.639Z] INFO: [Devices] Updated (name change): Gaming-PC-sdk → Gaming-PC-sdk
+[2026-05-16T22:08:23.667Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-16T22:08:23.729Z] INFO: [Socket] AC_CONTENT from Gaming-PC-sdk: 180 cars, 21 tracks
+[2026-05-16T22:08:32.625Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session a89d621dca216b0cbabb033afb3c0096
+[2026-05-16T22:08:34.065Z] INFO: [Socket] SESSION_STARTED: a89d621dca216b0cbabb033afb3c0096
+[2026-05-16T22:08:55.804Z] WARN: [SessionCtrl] FORCE_STOP → device 899f90afe6f0fc034ea75901cf525a93
+[2026-05-16T22:08:55.878Z] INFO: [Socket] SESSION_ENDED: a89d621dca216b0cbabb033afb3c0096 — 0.4 min
+[2026-05-16T22:16:42.390Z] INFO: [DB] SQLite connected: C:\Users\sajid\Desktop\Freelacing\actools\remote-manager\server\data\ac_manager.db
+[2026-05-16T22:16:42.392Z] INFO: [DB] SQLite migrations complete
+[2026-05-16T22:16:42.393Z] INFO: [DB] Startup cleanup: no stale state found
+[2026-05-16T22:16:42.398Z] INFO: Server listening on :4000
+[2026-05-16T22:16:43.404Z] INFO: [Socket] Dashboard connected (bypass): rcnDuQkkCcGd22rdAAAB
+[2026-05-16T22:16:50.056Z] INFO: [Devices] Updated (name change): Gaming-PC-sdk → Gaming-PC-sdk
+[2026-05-16T22:16:50.087Z] INFO: [Socket] Agent connected: Gaming-PC-sdk (899f90afe6f0fc034ea75901cf525a93)
+[2026-05-16T22:16:50.145Z] INFO: [Socket] AC_CONTENT from Gaming-PC-sdk: 180 cars, 21 tracks
+[2026-05-16T22:17:13.544Z] INFO: [SessionCtrl] START_SESSION → device 899f90afe6f0fc034ea75901cf525a93, session df7d1af87a31bb5c30fbffab2e7fc519
+[2026-05-16T22:17:15.396Z] INFO: [Socket] SESSION_STARTED: df7d1af87a31bb5c30fbffab2e7fc519
+[2026-05-16T22:22:16.100Z] INFO: [Socket] SESSION_ENDED: df7d1af87a31bb5c30fbffab2e7fc519 — 5.0 min
+[2026-05-16T22:22:24.342Z] INFO: [Socket] Agent disconnected: Gaming-PC-sdk

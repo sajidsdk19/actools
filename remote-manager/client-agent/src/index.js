@@ -5,6 +5,7 @@ const { io } = require('socket.io-client');
 const logger = require('./logger');
 const { launchSession, forceKillGame } = require('./gameProcess');
 const { saveToken, loadToken } = require('./tokenStore');
+const { scanAcContent } = require('./acScanner');
 
 const SERVER_URL   = process.env.SERVER_URL   || 'http://localhost:4000';
 const AGENT_SECRET = process.env.AGENT_SECRET || '';
@@ -49,6 +50,14 @@ function connect(token) {
 
   socket.on('connect', () => {
     logger.info(`[Agent] Connected to server — socket ${socket.id}`);
+    // Scan AC content and immediately send catalogue to server
+    emitAcContent();
+  });
+
+  // Dashboard (or operator) can request a fresh scan at any time
+  socket.on('SCAN_AC_CONTENT', () => {
+    logger.info('[Agent] SCAN_AC_CONTENT requested — re-scanning…');
+    emitAcContent();
   });
 
   socket.on('disconnect', (reason) => {
@@ -58,6 +67,18 @@ function connect(token) {
   socket.on('connect_error', (err) => {
     logger.error(`[Agent] Connection error: ${err.message}`);
   });
+
+  // ── AC Content scan helper ────────────────────────────────────────────────
+  function emitAcContent() {
+    try {
+      const content = scanAcContent(AC_ROOT);
+      socket.emit('AC_CONTENT', content);
+      logger.info(`[Agent] AC_CONTENT emitted — ${content.cars.length} cars, ${content.tracks.length} tracks`);
+    } catch (err) {
+      logger.error(`[Agent] AC scan failed: ${err.message}`);
+      socket.emit('AC_CONTENT', { cars: [], tracks: [], error: err.message });
+    }
+  }
 
   // ── Incoming Commands ───────────────────────────────────────────────────────
 

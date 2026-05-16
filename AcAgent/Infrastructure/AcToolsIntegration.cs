@@ -194,6 +194,50 @@ public sealed class AcToolsIntegration
         return exe;
     }
 
+    // ── Steam Cloud protection helpers ───────────────────────────────────────
+
+    /// <summary>
+    /// Returns the path AC actually reads race.ini from at runtime.
+    /// This is the user's Documents folder, NOT the Steam install directory.
+    /// </summary>
+    public string GetRaceIniPath() =>
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Assetto Corsa", "cfg", "race.ini");
+
+    /// <summary>
+    /// Temporarily sets race.ini read-only so Steam Cloud cannot overwrite it
+    /// during the critical window between WriteRaceConfig and acs.exe reading
+    /// the file. Call with readOnly=false once the game process is confirmed running.
+    /// This is the fix for the "Steam-cached car" problem.
+    /// </summary>
+    public void SetRaceIniReadOnly(bool readOnly)
+    {
+        var raceIniPath = GetRaceIniPath();
+        if (!File.Exists(raceIniPath)) return;
+        try
+        {
+            if (readOnly)
+            {
+                File.SetAttributes(raceIniPath, FileAttributes.ReadOnly);
+                _logger.LogInformation(
+                    "[Config] race.ini locked read-only to block Steam Cloud sync during launch.");
+            }
+            else
+            {
+                File.SetAttributes(raceIniPath, FileAttributes.Normal);
+                _logger.LogInformation(
+                    "[Config] race.ini unlocked (writable) — game can now update it.");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex,
+                "[Config] Could not set race.ini read-only={ReadOnly} (non-fatal — Steam may override car).",
+                readOnly);
+        }
+    }
+
     /// <summary>
     /// Writes race.ini and assists.ini into the AC cfg\ directory so the game
     /// picks up the chosen car, track, mode and assists on next launch.
@@ -203,11 +247,24 @@ public sealed class AcToolsIntegration
     {
         ValidateConfig(config);
 
-        var cfgDir = Path.Combine(_acRoot, "cfg");
-        Directory.CreateDirectory(cfgDir);
+        // AC reads race.ini from the user's Documents folder at runtime,
+        // NOT from the Steam install directory. We write to both locations
+        // for maximum compatibility across different AC setups.
+        var userAcCfgDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Assetto Corsa", "cfg");
+        var installCfgDir = Path.Combine(_acRoot, "cfg");
+
+        Directory.CreateDirectory(userAcCfgDir);
+        Directory.CreateDirectory(installCfgDir);
+
+        _logger.LogInformation(
+            "[Config] Writing race.ini to user cfg: {UserDir}  AND install cfg: {InstallDir}",
+            userAcCfgDir, installCfgDir);
 
         // ── race.ini ─────────────────────────────────────────────────────────
-        var raceIniPath = Path.Combine(cfgDir, "race.ini");
+        // Primary: Documents\Assetto Corsa\cfg\race.ini  (where AC reads from)
+        var raceIniPath = Path.Combine(userAcCfgDir, "race.ini");
         var raceIni = new AcTools.DataFile.IniFile(raceIniPath);
 
         // [RACE] section — core selection
@@ -259,6 +316,17 @@ public sealed class AcToolsIntegration
         raceIni.Save();
         _logger.LogInformation("[Config] race.ini written to {Path}", raceIniPath);
 
+        // Also copy to install dir (some AC versions read from there)
+        try
+        {
+            File.Copy(raceIniPath, Path.Combine(installCfgDir, "race.ini"), overwrite: true);
+            _logger.LogInformation("[Config] race.ini also copied to install dir: {InstallDir}", installCfgDir);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[Config] Could not copy race.ini to install dir (non-fatal).");
+        }
+
         // ── Diagnostic dump: log every line of the written race.ini ──────────
         // This lets you verify the exact car/track in agent.log on the gaming PC.
         try
@@ -275,7 +343,8 @@ public sealed class AcToolsIntegration
         }
 
         // ── assists.ini ───────────────────────────────────────────────────────
-        var assistsIniPath = Path.Combine(cfgDir, "assists.ini");
+        // Write to user Documents dir (primary) — same as race.ini
+        var assistsIniPath = Path.Combine(userAcCfgDir, "assists.ini");
         var assistsIni = new AcTools.DataFile.IniFile(assistsIniPath);
         var ea = config.EasyAssists;
 
@@ -294,6 +363,17 @@ public sealed class AcToolsIntegration
 
         assistsIni.Save();
         _logger.LogInformation("[Config] assists.ini written to {Path}", assistsIniPath);
+
+        // Also copy to install dir
+        try
+        {
+            File.Copy(assistsIniPath, Path.Combine(installCfgDir, "assists.ini"), overwrite: true);
+            _logger.LogInformation("[Config] assists.ini also copied to install dir: {InstallDir}", installCfgDir);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[Config] Could not copy assists.ini to install dir (non-fatal).");
+        }
     }
 
     // ── StartProperties builder ──────────────────────────────────────────────

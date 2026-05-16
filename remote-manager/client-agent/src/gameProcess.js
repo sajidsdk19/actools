@@ -1,5 +1,7 @@
 const { spawn, exec } = require('child_process');
 const path   = require('path');
+const os     = require('os');
+const fs     = require('fs');
 const logger = require('./logger');
 
 const AC_AGENT_EXE = process.env.AC_AGENT_EXE;   // path to your existing AcAgent.exe
@@ -8,6 +10,105 @@ const AC_ROOT      = process.env.AC_ROOT;
 // Tracks the currently running AcAgent process
 let agentProc = null;
 let timerInterval = null;
+
+// ── race.ini direct write (belt-and-braces car selection fix) ────────────────
+// AC reads race.ini from Documents\Assetto Corsa\cfg\race.ini at launch.
+// Steam Cloud can overwrite this file when the game starts, restoring the
+// previously-played car. We write it here (from Node.js) AND lock it read-only
+// so Steam cannot override our selection. Unlocked once acs.exe is running.
+
+const RACE_INI_PATH = path.join(
+  os.homedir(), 'Documents', 'Assetto Corsa', 'cfg', 'race.ini'
+);
+
+/**
+ * Resolves the first available skin folder for the given car, or 'default'.
+ */
+function resolveCarSkin(carId) {
+  try {
+    const skinsDir = path.join(AC_ROOT, 'content', 'cars', carId, 'skins');
+    const skins = fs.readdirSync(skinsDir, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => d.name)
+      .sort();
+    return skins[0] || 'default';
+  } catch {
+    return 'default';
+  }
+}
+
+/**
+ * Writes race.ini with the selected car/track and locks it read-only
+ * so Steam Cloud cannot restore the old cached car during launch.
+ */
+function writeAndLockRaceIni(carId, trackId, trackLayout, mode, durationMinutes) {
+  try {
+    const skin = resolveCarSkin(carId);
+    const sessionType = mode === 'QuickRace' ? 3 : 1;
+
+    const content = [
+      '[RACE]',
+      `MODEL=${carId}`,
+      `SKIN=${skin}`,
+      `TRACK=${trackId}`,
+      `CONFIG_TRACK=${trackLayout || ''}`,
+      'CARS=1',
+      'AI_LEVEL=95',
+      '',
+      '[SESSION_0]',
+      `NAME=${mode}`,
+      `TYPE=${sessionType}`,
+      `DURATION_MINUTES=${durationMinutes}`,
+      'SPAWN_SET=HOTLAP_START',
+      '',
+      '[CAR_0]',
+      `MODEL=${carId}`,
+      `SKIN=${skin}`,
+      'AI_LEVEL=0',
+      '',
+      '[WEATHER_0]',
+      'GRAPHICS=Clear',
+      'BASE_TEMPERATURE_AMBIENT=26',
+      'BASE_TEMPERATURE_ROAD=32',
+      'VARIATION_AMBIENT=0',
+      'WIND_BASE_SPEED_MIN=0',
+      'WIND_BASE_SPEED_MAX=0',
+      'WIND_DIRECTION=0',
+      'WIND_DIRECTION_VARIATION=0',
+      '',
+      '[DYNAMIC_TRACK]',
+      'SESSION_START=95',
+      'RANDOMNESS=1',
+      'LAP_GAIN=2',
+      'SESSION_TRANSFER=80',
+    ].join('\r\n');
+
+    // Ensure cfg dir exists
+    fs.mkdirSync(path.dirname(RACE_INI_PATH), { recursive: true });
+
+    // Remove read-only if already set (from a previous crashed session)
+    try { fs.chmodSync(RACE_INI_PATH, 0o666); } catch {}
+
+    fs.writeFileSync(RACE_INI_PATH, content, 'utf8');
+    logger.info(`[GameProcess] race.ini written: car=${carId} track=${trackId} skin=${skin}`);
+
+    // Lock read-only — blocks Steam Cloud from overwriting during launch
+    fs.chmodSync(RACE_INI_PATH, 0o444);
+    logger.info('[GameProcess] race.ini locked read-only (Steam Cloud protection active)');
+  } catch (err) {
+    logger.error(`[GameProcess] Failed to write/lock race.ini: ${err.message}`);
+  }
+}
+
+/**
+ * Restores race.ini to writable so the game can update it after the session.
+ */
+function unlockRaceIni() {
+  try {
+    fs.chmodSync(RACE_INI_PATH, 0o666);
+    logger.info('[GameProcess] race.ini unlocked (game can now write to it)');
+  } catch {}
+}
 
 /**
  * Launches Assetto Corsa via the existing AcAgent.exe (your C# binary).
@@ -45,6 +146,11 @@ async function launchSession(payload, socket) {
 
   logger.info(`[GameProcess] Launching: ${AC_AGENT_EXE} ${args.join(' ')}`);
 
+  // Write race.ini from Node.js BEFORE spawning AcAgentCli.exe.
+  // This guarantees the correct car is written even if the C# binary
+  // has a stale build, and locks it so Steam Cloud can't override it.
+  writeAndLockRaceIni(carId, trackId, trackLayout, mode, durationMinutes);
+
   const startTime = Date.now();
 
   agentProc = spawn(AC_AGENT_EXE, args, {
@@ -62,6 +168,7 @@ async function launchSession(payload, socket) {
     if (gameClockTimer) { clearTimeout(gameClockTimer); gameClockTimer = null; }
     logger.error(`[GameProcess] Failed to spawn AcAgent.exe: ${err.message}`);
     stopTimerUpdates();
+    unlockRaceIni(); // release lock on spawn failure
     socket.emit('SESSION_ERROR', { sessionId, error: `Spawn failed: ${err.message}` });
     agentProc = null;
   });
@@ -98,6 +205,8 @@ async function launchSession(payload, socket) {
     // (in case AutoStart is disabled / SPACE is never sent)
     if (line.includes('Game clock started') && !gameClockTimer && !gameStarted) {
       logger.info('[GameProcess] Game clock detected — will start dashboard timer on SPACE or in 3 min.');
+      // Game is running and has loaded race.ini — safe to unlock it now
+      unlockRaceIni();
       gameClockTimer = setTimeout(() => {
         logger.warn('[GameProcess] SPACE key not detected after 3 min — starting timer as fallback.');
         markGameStarted();
@@ -124,6 +233,7 @@ async function launchSession(payload, socket) {
   return new Promise((resolve) => {
     agentProc.on('close', (code) => {
       stopTimerUpdates();
+      unlockRaceIni(); // always release lock when process ends
 
       // Skip SESSION_ENDED if spawn already failed — SESSION_ERROR was already sent.
       if (spawnFailed) {
